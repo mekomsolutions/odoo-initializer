@@ -1,0 +1,64 @@
+buildDir = file(project.projectDir.absolutePath + "/build/")
+def odooRepoUrl = "https://github.com/odoo/odoo.git"
+
+def getVersion = {
+  def stdout = new ByteArrayOutputStream()
+  exec {
+    workingDir project.projectDir.absolutePath + "/" + project.name + "/"
+    commandLine 'python', '-c', 'import sys; import ast; file = open("__manifest__.py"); manifest = ast.literal_eval(file.read()); sys.stdout.write(manifest["version"])'
+    standardOutput = stdout
+  }
+  return stdout.toString()
+}
+
+project.version = getVersion()
+
+task odooInstallDeps(type: Exec) {
+  workingDir project.projectDir.absolutePath + "/" + project.name + "/"
+  commandLine 'pip3', 'install', '-r', 'requirements.txt'
+}
+task odooFetchBin(type: Exec) {
+  workingDir buildDir
+  commandLine 'git', 'clone', odooRepoUrl
+}
+task odooStart(type: Exec) {
+  workingDir buildDir
+  commandLine './odoo/odoo-bin'
+}
+task odooStop(type:Exec) {
+  workingDir buildDir
+  commandLine './odoo/odoo-bin', '--save', '--stop-after-init'
+}
+task runTests(type:Exec) {
+  workingDir project.projectDir.absolutePath + "/" + project.name + "/"
+  commandLine 'python', '-W', 'ignore', '-m', 'pytest'
+}
+
+task test() {
+  dependsOn odooInstallDeps, odooFetchBin, odooStart, odooStop, runTests
+}
+
+task copySources(type: Copy) {
+  from "./" + project.name + "/"
+  exclude "tests"
+  into "" + buildDir + "/" + project.name + "/"
+}
+
+task archiveSources(type: Zip) { 
+  dependsOn copySources
+  archiveBaseName = project.name
+  archiveVersion = getVersion()
+  from "" + buildDir + "/" +  project.name + "/"
+  destinationDirectory = buildDir
+}
+
+task clean {
+  delete "" + buildDir + "/" +  project.name
+}
+task assemble {
+  dependsOn archiveSources
+}
+
+task build {
+  dependsOn(test, assemble)
+} 

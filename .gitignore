@@ -3,3 +3,12 @@ env/
 .vscode/
 __pycache__/
 *.py[cod]
+
+# Gradle/Gradle Wrapper files
+gradle/
+gradlew*
+gradle*
+.gradle
+
+# Gradle build files
+build/
