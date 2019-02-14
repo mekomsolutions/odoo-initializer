@@ -19,7 +19,6 @@
     'version': '1.0-SNAPSHOT',
 
     "depends": ["base", "base_import"],
-    "external_dependencies": {"python" : ["odoorpc"]},
 
     "application": True,
     "installable": True,
