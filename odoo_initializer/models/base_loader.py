@@ -43,22 +43,23 @@ class BaseModelImporter:
                 model = env[self.model_name]
 
                 for record in file_:
-                    found_ids = model.search(
+                    found_records = model.search(
                         [(self.identifier, "=", record[self.identifier])]
                     )
-                    if found_ids and not self.update_existing_record:
-                        _logger.info("Skipping record with ID:" + str(found_ids[0]))
+                    # TODO: what if there are multiple records found for the same record.
+                    #  for now taking only the first record into consideration
+                    if found_records and not self.update_existing_record:
+                        _logger.info("Existing record with ID:" + str(found_records[0]) + "skipped.")
                         continue
 
-                    if found_ids:
-                        # TODO: what if there are two IDs found for the same record
+                    if found_records:
+                        found_records[0].write(record)
                         _logger.info(
-                            "Updating existing records for ID:" + str(found_ids[0])
+                            "Existing record with ID:" + str(found_records[0]) + "updated."
                         )
-                        model.write(found_ids["id"], record)
                     else:
                         saved_record = model.create(record)
-                        _logger.info("record created with ID:" + str(saved_record))
+                        _logger.info("New record with ID:" + str(saved_record) + "created.")
 
         return file_
 

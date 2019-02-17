@@ -5,7 +5,7 @@ from models.drug_loader import DrugLoader
 
 _logger = logging.getLogger(__name__)
 
-_logger.warn("started")
+_logger.info("start initialization process")
 
 registered_loader = [DrugLoader]
 
@@ -14,4 +14,4 @@ for loader_class in registered_loader:
     loader.load_()
 
 
-_logger.warn("done")
+_logger.info("initialization done")
