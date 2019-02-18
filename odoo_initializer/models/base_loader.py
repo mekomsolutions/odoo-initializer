@@ -1,25 +1,29 @@
 import logging
 
-import csv
+import odoo
+from odoo import api
+from odoo.api import Environment
 
-from utils import config_loader
+from ..utils.config_loader import config_loader
 
 _logger = logging.getLogger(__name__)
 
 
 class BaseModelImporter:
+    def __init__(self):
+        pass
+
     model_name = None
     _model = None
     data_files_source = "odoo"  # ["openmrs, "odoo"]
     update_existing_record = False
     identifier = None
-    allowed_file_extensions = [".csv"]  # supported file extensions [".csv", ".xls", ".xlsx"]
+    allowed_file_extensions = [
+        ".csv"
+    ]  # supported file extensions [".csv", ".xls", ".xlsx"]
     field_mapping = None
     folder = None
     filters = {}
-
-    def __init__(self):
-        self._model = config_loader.odoo_.env[self.model_name]
 
     def load_files(self, relevant_folder):
         return config_loader.get_files(
@@ -28,38 +32,54 @@ class BaseModelImporter:
             allowed_extensions=self.allowed_file_extensions,
         )
 
-    def load_file(self, file: [dict]):
+    def load_file(self, file_):
 
-        model = self._model
+        with api.Environment.manage():
+            registry = odoo.modules.registry.RegistryManager.get(config_loader._db_name)
+            with registry.cursor() as cr:
+                registry.delete_all()
+                uid = odoo.SUPERUSER_ID
+                env = Environment(cr, uid, {})
+                model = env[self.model_name]
 
-        for record in file:
-            found_ids = model.search([(self.identifier, "=", record[self.identifier])])
-            if found_ids and not self.update_existing_record:
-                _logger.info("Skipping record with ID:", found_ids)
-                continue
+                for record in file_:
+                    found_records = model.search(
+                        [(self.identifier, "=", record[self.identifier])]
+                    )
+                    # TODO: what if there are multiple records found for the same record.
+                    #  for now taking only the first record into consideration
+                    if found_records and not self.update_existing_record:
+                        _logger.info("Existing record with ID:" + str(found_records[0]) + "skipped.")
+                        continue
 
-            if found_ids:
-                # TODO: what if there are two IDs found for the same record
-                _logger.info("Updating existing records for ID:", found_ids)
-                model.write([found_ids[0]], record)
-            else:
-                saved_record = model.create(record)
-                _logger.info("record created with ID:", saved_record)
+                    if found_records:
+                        found_records[0].write(record)
+                        _logger.info(
+                            "Existing record with ID:" + str(found_records[0]) + "updated."
+                        )
+                    else:
+                        saved_record = model.create(record)
+                        _logger.info("New record with ID:" + str(saved_record) + "created.")
 
-        return file
+        return file_
 
-    def _validate_mapping(self, mapping: {}):
+    def _validate_mapping(self, mapping):
         validated_mapping = {}
-        model = self._model
-        model_keys =model._columns
+        with api.Environment.manage():
+            registry = odoo.modules.registry.RegistryManager.get(config_loader._db_name)
+            with registry.cursor() as cr:
+                registry.delete_all()
+                uid = odoo.SUPERUSER_ID
+                env = Environment(cr, uid, {})
+                model = env[self.model_name]
+                model_keys = model.fields_get()
         if not mapping:
             for key in model_keys.items():
                 validated_mapping[key[1].string] = key[1].string
-        # for key, value in mapping.items():
-        #     continue
+        # TODO: check the match between keys and mappings
         return validated_mapping or mapping
 
-    def _mapper(self, file_: [dict], mapping: {}, filters_: {}):
+    def _mapper(self, file_, mapping, filters_):
         if not isinstance(filters_, dict):
             filters_ = {}
         mapped_csv = []
