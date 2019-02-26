@@ -37,7 +37,6 @@ class BaseModelImporter:
         with api.Environment.manage():
             registry = odoo.modules.registry.RegistryManager.get(config_loader._db_name)
             with registry.cursor() as cr:
-                registry.delete_all()
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
                 model = env[self.model_name]
@@ -49,17 +48,17 @@ class BaseModelImporter:
                     # TODO: what if there are multiple records found for the same record.
                     #  for now taking only the first record into consideration
                     if found_records and not self.update_existing_record:
-                        _logger.info("Existing record with ID:" + str(found_records[0]) + "skipped.")
+                        _logger.info("Existing record with ID: " + str(found_records[0]) + " skipped.")
                         continue
 
                     if found_records:
                         found_records[0].write(record)
                         _logger.info(
-                            "Existing record with ID:" + str(found_records[0]) + "updated."
+                            "Existing record with ID: " + str(found_records[0]) + " updated."
                         )
                     else:
                         saved_record = model.create(record)
-                        _logger.info("New record with ID:" + str(saved_record) + "created.")
+                        _logger.info("New record with ID: " + str(saved_record) + " created.")
 
         return file_
 
@@ -68,7 +67,6 @@ class BaseModelImporter:
         with api.Environment.manage():
             registry = odoo.modules.registry.RegistryManager.get(config_loader._db_name)
             with registry.cursor() as cr:
-                registry.delete_all()
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
                 model = env[self.model_name]
