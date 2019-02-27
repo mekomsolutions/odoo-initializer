@@ -70,10 +70,10 @@ class BaseModelImporter:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
                 model = env[self.model_name]
-                model_keys = model.fields_get()
+                model_fields = model.fields_get()
         if not mapping:
-            for key in model_keys.items():
-                validated_mapping[key[1].string] = key[1].string
+            for field in model_fields.items():
+                validated_mapping[field[0]] = field[0]
         # TODO: check the match between keys and mappings
         return validated_mapping or mapping
 
