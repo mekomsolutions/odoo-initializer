@@ -45,7 +45,7 @@ class ConfigLoader:
     def get_files(self, data_files_source, folder, allowed_extensions):
         import_files = []
         if not self.get_config_path(data_files_source):
-            _logger.info(ValueError("Invalid config path"))
+            _logger.warn(ValueError("Invalid config path"))
             return []
         path = os.path.join(self.get_config_path(data_files_source), folder)
         _logger.info("path:" + path)
