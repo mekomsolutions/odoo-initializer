@@ -4,12 +4,13 @@ import odoo
 from odoo import api
 from odoo.api import Environment
 
-from ..utils.config_loader import config_loader
+from ..utils.config import config
+from ..utils.data_files_utils import data_files
 
 _logger = logging.getLogger(__name__)
 
 
-class BaseModelImporter:
+class BaseModelLoader:
     def __init__(self):
         pass
 
@@ -26,7 +27,7 @@ class BaseModelImporter:
     filters = {}
 
     def load_files(self, relevant_folder):
-        return config_loader.get_files(
+        return data_files.get_files(
             self.data_files_source,
             relevant_folder,
             allowed_extensions=self.allowed_file_extensions,
@@ -35,7 +36,7 @@ class BaseModelImporter:
     def load_file(self, file_):
 
         with api.Environment.manage():
-            registry = odoo.modules.registry.RegistryManager.get(config_loader._db_name)
+            registry = odoo.modules.registry.RegistryManager.get(config.db_name)
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
@@ -65,7 +66,7 @@ class BaseModelImporter:
     def _validate_mapping(self, mapping):
         validated_mapping = {}
         with api.Environment.manage():
-            registry = odoo.modules.registry.RegistryManager.get(config_loader._db_name)
+            registry = odoo.modules.registry.RegistryManager.get(config.db_name)
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
