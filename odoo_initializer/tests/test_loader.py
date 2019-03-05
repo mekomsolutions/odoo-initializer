@@ -1,7 +1,7 @@
 from odoo.tests import logging
 from odoo import tests
 
-from ..models import BaseModelImporter
+from ..models import BaseModelLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class TestOpenmrsLoader(tests.TransactionCase):
     def test_no_duplicates(self):
 
         # Setup
-        test_loader = BaseModelImporter()
+        test_loader = BaseModelLoader()
         test_loader.model_name = self._test_model
         test_loader.identifier = "name"
 
@@ -53,7 +53,7 @@ class TestOpenmrsLoader(tests.TransactionCase):
         old_phone = "0167771"
         updated_phone = "010110"
 
-        test_loader = BaseModelImporter()
+        test_loader = BaseModelLoader()
         test_loader.model_name = self._test_model
         test_loader.identifier = "name"
         test_loader.update_existing_record = True
@@ -75,7 +75,7 @@ class TestOpenmrsLoader(tests.TransactionCase):
         old_phone = "0167771"
         updated_phone = "010110"
 
-        test_loader = BaseModelImporter()
+        test_loader = BaseModelLoader()
         test_loader.model_name = self._test_model
         test_loader.identifier = "name"
         test_loader.update_existing_record = False
@@ -93,7 +93,7 @@ class TestOpenmrsLoader(tests.TransactionCase):
     def test_filter_applied(self):
 
         # Setup
-        test_loader = BaseModelImporter()
+        test_loader = BaseModelLoader()
         test_loader.model_name = self._test_model
         test_loader.identifier = "name"
         test_loader.filters = {"website": "example.com"}

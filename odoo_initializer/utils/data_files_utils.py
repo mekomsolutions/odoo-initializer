@@ -1,53 +1,30 @@
-import csv
 import logging
 import os
 import hashlib
-
-import odoo.tools.config
-from os.path import dirname, basename, split
+import csv
+from .config import config
 
 _logger = logging.getLogger(__name__)
 
+from os.path import dirname, basename, split
 
-class ConfigLoader:
-    def __init__(self):
-        try:
-            self.openmrs_path = odoo.tools.config["openmrs_initializer_path"]
-        except KeyError:
-            self.openmrs_path = None
-            _logger.warn("'openmrs_initializer_path' variable is not set")
-        try:
-            self.odoo_path = odoo.tools.config["odoo_initializer_path"]
-        except KeyError:
-            _logger.warn("'odoo_initializer_path' is not set, using 'data_dir' path as default")
-            self.odoo_path = odoo.tools.config["data_dir"]
-        try:
-            self._db_name = odoo.tools.config["db_name"]
-        except KeyError:
-            pass
+
+class DataFilesUtils:
 
     @staticmethod
-    def get_config_path(data_files_source):
+    def get_data_folder_path(data_files_source):
         data_files_source = data_files_source.lower()
         assert data_files_source in ["odoo", "openmrs"]
-
-        path = (
-            "openmrs_initializer_path"
-            if data_files_source == "openmrs"
-            else "odoo_initializer_path"
+        return (
+            config.openmrs_path if data_files_source == "openmrs" else config.odoo_path
         )
-        try:
-            config_path = odoo.tools.config[path]
-        except KeyError:
-            config_path = ""
-        return config_path
 
     def get_files(self, data_files_source, folder, allowed_extensions):
         import_files = []
-        if not self.get_config_path(data_files_source):
+        if not self.get_data_folder_path(data_files_source):
             _logger.warn(ValueError("Invalid config path"))
             return []
-        path = os.path.join(self.get_config_path(data_files_source), folder)
+        path = os.path.join(self.get_data_folder_path(data_files_source), folder)
         _logger.info("path:" + path)
         for root, dirs, files in os.walk(path):
             for file_ in files:
@@ -98,4 +75,4 @@ class ConfigLoader:
         return hash_md5.hexdigest()
 
 
-config_loader = ConfigLoader()
+data_files = DataFilesUtils()

@@ -1,1 +1,1 @@
-from .base_loader import BaseModelImporter
+from .base_loader import BaseModelLoader
