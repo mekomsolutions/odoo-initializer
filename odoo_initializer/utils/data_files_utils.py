@@ -2,6 +2,8 @@ import logging
 import os
 import hashlib
 import csv
+import tempfile
+
 from .config import config
 
 _logger = logging.getLogger(__name__)
@@ -10,7 +12,6 @@ from os.path import dirname, basename, split
 
 
 class DataFilesUtils:
-
     @staticmethod
     def get_data_folder_path(data_files_source):
         data_files_source = data_files_source.lower()
@@ -73,6 +74,19 @@ class DataFilesUtils:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
+
+    @staticmethod
+    def build_csv(data):
+        tmp_file = tempfile.TemporaryFile()
+
+        output = csv.DictWriter(tmp_file, fieldnames=data[0].keys())
+        output.writeheader()
+        output.writerows(data)
+        tmp_file.seek(0)
+        csv_string = tmp_file.read()
+        tmp_file.close()
+        csv_string.replace("\r\n", "\n")
+        return csv_string
 
 
 data_files = DataFilesUtils()
