@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class PriceListLoader(BaseModelLoader):
     update_existing_record = True
-    data_files_source = "odoo"
+    data_files_source = "openmrs"
     model_name = "product.pricelist"
     folder = "pricelist"
-    identifier = "name"
+

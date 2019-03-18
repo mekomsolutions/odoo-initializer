@@ -1,1 +1,1 @@
-import activator
+from . import activator

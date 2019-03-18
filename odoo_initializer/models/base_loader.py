@@ -16,12 +16,10 @@ class BaseModelLoader:
 
     model_name = None
     _model = None
+    fields = None
     data_files_source = "odoo"  # ["openmrs, "odoo"]
     update_existing_record = False
-    identifier = None
-    allowed_file_extensions = [
-        ".csv"
-    ]  # supported file extensions [".csv", ".xls", ".xlsx"]
+    allowed_file_extensions = [".csv"]
     field_mapping = None
     folder = None
     filters = {}
@@ -38,52 +36,53 @@ class BaseModelLoader:
         with api.Environment.manage():
             registry = odoo.modules.registry.RegistryManager.get(config.db_name)
             with registry.cursor() as cr:
+
+                registry.delete_all()
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
-                model = env[self.model_name]
+                model = env["base_import.import"]
+                import_wizard = model.create(
+                    {
+                        "res_model": self.model_name,
+                        "file": file_,
+                        "file_type": "text/csv",
+                    }
+                )
+                result = import_wizard.do(
+                    self.fields, {"quoting": '"', "separator": ",", "headers": True}
+                )
+        return result
 
-                for record in file_:
-                    found_records = model.search(
-                        [(self.identifier, "=", record[self.identifier])]
-                    )
-                    # TODO: what if there are multiple records found for the same record.
-                    #  for now taking only the first record into consideration
-                    if found_records and not self.update_existing_record:
-                        _logger.info("Existing record with ID: " + str(found_records[0]) + " skipped.")
-                        continue
-
-                    if found_records:
-                        found_records[0].write(record)
-                        _logger.info(
-                            "Existing record with ID: " + str(found_records[0]) + " updated."
-                        )
-                    else:
-                        saved_record = model.create(record)
-                        _logger.info("New record with ID: " + str(saved_record) + " created.")
-
-        return file_
-
-    def _validate_mapping(self, mapping):
+    def _validate_mapping(self, mapping, file_header):
         validated_mapping = {}
         with api.Environment.manage():
             registry = odoo.modules.registry.RegistryManager.get(config.db_name)
             with registry.cursor() as cr:
+                registry.delete_all()
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
                 model = env[self.model_name]
                 model_fields = model.fields_get()
         if not mapping:
-            for field in model_fields.items():
-                validated_mapping[field[0]] = field[0]
-        # TODO: check the match between keys and mappings
-        return validated_mapping or mapping
+            for key in file_header:
+                validated_mapping[key] = key
+        else:
+            for field in mapping.items():
+                for model_field in model_fields.items():
+                    if field[0] == model_field[0]:
+                        validated_mapping[field[0]] = field[1]
+                        break
+
+        return validated_mapping
 
     def _mapper(self, file_, mapping, filters_):
         if not isinstance(filters_, dict):
             filters_ = {}
-        mapped_csv = []
+        mapped_dict = []
+        file_header = file_[0].keys()
 
-        mapping = self._validate_mapping(mapping)
+        mapping = self._validate_mapping(mapping, file_header)
+        self.fields = mapping.keys()
         for dict_line in file_:
             row = {}
             for key, value in mapping.items():
@@ -91,7 +90,7 @@ class BaseModelLoader:
                     row[key] = dict_line.pop(value)
 
             if not filters_:
-                mapped_csv.append(row)
+                mapped_dict.append(row)
 
             for filter_key, filter_value in filters_.items():
                 if filter_key in row.keys():
@@ -101,7 +100,9 @@ class BaseModelLoader:
                         else filter_value
                     )
                     if row[filter_key] in filter_value:
-                        mapped_csv.append(row)
+                        mapped_dict.append(row)
+
+        mapped_csv = data_files.build_csv(mapped_dict)
         return mapped_csv
 
     def load_(self):
