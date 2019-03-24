@@ -17,6 +17,7 @@ class BaseModelLoader:
     model_name = None
     _model = None
     fields = None
+    test = False
     data_files_source = "odoo"  # ["openmrs, "odoo"]
     update_existing_record = False
     allowed_file_extensions = [".csv"]
@@ -35,9 +36,9 @@ class BaseModelLoader:
 
         with api.Environment.manage():
             registry = odoo.modules.registry.RegistryManager.get(config.db_name)
-            with registry.cursor() as cr:
-
+            if not self.test:
                 registry.delete_all()
+            with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
                 model = env["base_import.import"]
@@ -57,8 +58,9 @@ class BaseModelLoader:
         validated_mapping = {}
         with api.Environment.manage():
             registry = odoo.modules.registry.RegistryManager.get(config.db_name)
-            with registry.cursor() as cr:
+            if not self.test:
                 registry.delete_all()
+            with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
                 model = env[self.model_name]
