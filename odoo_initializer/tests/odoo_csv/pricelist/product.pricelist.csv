@@ -1,0 +1,2 @@
+"id","company_id/id","name","currency_id/id","discount_policy","sequence","item_ids/applied_on","item_ids/base","item_ids/compute_price","item_ids/min_quantity","item_ids/price_discount","item_ids/percent_price","item_ids/product_id/id","item_ids/date_start","item_ids/date_end"
+"__export__.product_pricelist_5","","Summer Discount 2019","base.USD","Discount included in the price","16","Global","Public Price","Percentage (discount)","1","0.0","20.0","","2019-06-21","2019-09-23"
