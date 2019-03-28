@@ -1,3 +1,0 @@
-id,name,purchase_ok,rental,sale_ok,standard_price,property_account_expense_id/id,property_account_income_id/id,invoice_policy,default_code,price,pricelist_id/id,lst_price,list_price,warranty
-__export__.product_template_74,Cebocap,True,False,True,0,,,Ordered quantities,cebocap,0,,13,13,0
-__export__.product_template_73,Obecalp,True,False,True,0,,,Ordered quantities,obecalp,0,,12,12,0
