@@ -1,7 +1,7 @@
-from .base_loader import BaseModelLoader
+from .base_csv_loader import BaseCsvLoader
 
 
-class DrugLoader(BaseModelLoader):
+class DrugLoader(BaseCsvLoader):
     update_existing_record = True
     data_files_source = "openmrs"
     model_name = "product.template"

@@ -10,7 +10,7 @@ from ..utils.data_files_utils import data_files
 _logger = logging.getLogger(__name__)
 
 
-class BaseModelLoader:
+class BaseCsvLoader:
     def __init__(self):
         pass
 

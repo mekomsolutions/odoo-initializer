@@ -1,7 +1,7 @@
-from .base_loader import BaseModelLoader
+from .base_csv_loader import BaseCsvLoader
 
 
-class JournalLoader(BaseModelLoader):
+class JournalLoader(BaseCsvLoader):
     update_existing_record = True
     data_files_source = "odoo"
     model_name = "account.journal"
