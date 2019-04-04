@@ -3,6 +3,8 @@ import os
 import hashlib
 import csv
 import tempfile
+import xml.etree.ElementTree as ET
+from lxml import  objectify
 
 from .config import config
 
@@ -19,6 +21,20 @@ class DataFilesUtils:
         return (
             config.openmrs_path if data_files_source == "openmrs" else config.odoo_path
         )
+
+    @staticmethod
+    def get_csv_content(file_data):
+        extracted_csv = csv.DictReader(file_data)
+        csv_dict = []
+        for row in extracted_csv:
+            csv_dict.append(row)
+        return csv_dict
+
+    @staticmethod
+    def get_xml_content(file_data):
+        file_content = file_data.read()
+        tree = objectify.fromstring(file_content)
+        return tree
 
     def get_files(self, data_files_source, folder, allowed_extensions):
         import_files = []
@@ -37,11 +53,10 @@ class DataFilesUtils:
                         _logger.info("Skipping already processed file: " + str(file_))
                         continue
                     with open(os.path.join(path, file_), "r") as file_data:
-                        extracted_csv = csv.DictReader(file_data)
-                        csv_dict = []
-                        for row in extracted_csv:
-                            csv_dict.append(row)
-                        import_files.append(csv_dict)
+                        if ".csv" in allowed_extensions:
+                            import_files.append(self.get_csv_content(file_data))
+                        elif ".xml" in allowed_extensions:
+                            import_files.append()
         return import_files
 
     def file_already_processed(self, file_):

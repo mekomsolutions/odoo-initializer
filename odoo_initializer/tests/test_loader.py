@@ -1,7 +1,7 @@
 from odoo.tests import logging
 from odoo import tests
 
-from ..models import BaseModelLoader
+from ..models import BaseCsvLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class TestOpenmrsLoader(tests.TransactionCase):
     def test_filter_applied(self):
 
         # Setup
-        test_loader = BaseModelLoader()
+        test_loader = BaseCsvLoader()
         test_loader.model_name = self._test_model
         test_loader.identifier = "name"
         test_loader.test = True

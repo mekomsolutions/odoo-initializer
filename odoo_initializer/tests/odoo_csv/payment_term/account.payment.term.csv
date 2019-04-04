@@ -1,2 +1,2 @@
-id,company_id/id,name,line_ids/days,line_ids/value,line_ids/value_amount,line_ids/sequence,note
-account.account_payment_term_15days,base.main_company,15 Days,15,Balance,0,500,Payment term: 15 Days
+id,company_id/id,name,line_ids/days,line_ids/value_amount,note,line_ids/option,line_ids/value
+account.account_payment_term_90days,base.main_company,90 Days,90,0,Payment term: 90 Days,Day(s) after the invoice date,Balance
