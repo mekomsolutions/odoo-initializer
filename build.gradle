@@ -1,5 +1,9 @@
 buildDir = file(project.projectDir.absolutePath + "/build/")
 def odooRepoUrl = "https://github.com/odoo/odoo.git"
+def testResourcesDir = file(buildDir.getAbsolutePath()   + "/tests/resources/")
+def initzDir = file(project.projectDir.absolutePath + "/" + project.name + "/")
+def filestore = file("/tmp/tests/filestore")
+//def filestore = file(buildDir.getAbsolutePath() + "/tests/filestore")
 
 def getVersion = {
   def stdout = new ByteArrayOutputStream()
@@ -13,29 +17,56 @@ def getVersion = {
 
 project.version = getVersion()
 
-task odooInstallDeps(type: Exec) {
-  workingDir project.projectDir.absolutePath + "/" + project.name + "/"
-  commandLine 'pip3', 'install', '-r', 'requirements.txt'
-}
-task odooFetchBin(type: Exec) {
-  workingDir buildDir
-  commandLine 'git', 'clone', odooRepoUrl
-}
-task odooStart(type: Exec) {
-  workingDir buildDir
-  commandLine './odoo/odoo-bin'
-}
-task odooStop(type:Exec) {
-  workingDir buildDir
-  commandLine './odoo/odoo-bin', '--save', '--stop-after-init'
-}
-task runTests(type:Exec) {
-  workingDir project.projectDir.absolutePath + "/" + project.name + "/"
-  commandLine 'python', '-W', 'ignore', '-m', 'pytest'
+task removeOdoo (type: Exec) {
+  commandLine 'docker', 'rm', '-vf', 'dockerfiles_odoo_1'
 }
 
-task test() {
-  dependsOn odooInstallDeps, odooFetchBin, odooStart, odooStop, runTests
+task copyTestResources(type: Copy) {
+  from initzDir.getAbsolutePath() + "/tests/resources/"
+  into testResourcesDir
+  expand(testResources: testResourcesDir.getAbsolutePath(), sources: initzDir.getAbsolutePath() , filestore: filestore.getAbsolutePath())
+}
+
+task removeOdooWithCompose (type: Exec) {
+  dependsOn copyTestResources
+  workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/initialize-db.docker-compose.yml', 'down', '-v'
+}
+
+task runDbDetached (type: Exec) {
+  dependsOn copyTestResources
+  workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/run-db.docker-compose.yml', 'up', '--detach'
+}
+
+task initializeDb (type: Exec) {
+  dependsOn copyTestResources, runDbDetached
+  workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/initialize-db.docker-compose.yml', 'up', '--abort-on-container-exit'
+}
+
+task runUnitTests (type: Exec) {
+  dependsOn initializeDb
+  workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/run-unit-tests.docker-compose.yml', 'up', '--abort-on-container-exit'
+}
+
+task setVolumePermissions (type:Exec) {
+  dependsOn runDbDetached
+  workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/set-volume-permissions.docker-compose.yml', 'up', '--abort-on-container-exit'
+}
+
+task installExtras (type: Exec) {
+  dependsOn setVolumePermissions
+  workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/install-extras.docker-compose.yml', 'up', '--abort-on-container-exit'
+}
+
+task processCSVs (type: Exec) {
+  dependsOn copyTestResources, installExtras
+  workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/run-with-csvs.docker-compose.yml', 'up', '--abort-on-container-exit'
 }
 
 task copySources(type: Copy) {
@@ -44,7 +75,7 @@ task copySources(type: Copy) {
   into "" + buildDir + "/" + project.name + "/"
 }
 
-task archiveSources(type: Zip) { 
+task archiveSources(type: Zip) {
   dependsOn copySources
   archiveBaseName = project.name
   archiveVersion = getVersion()
@@ -52,13 +83,20 @@ task archiveSources(type: Zip) {
   destinationDirectory = buildDir
 }
 
-task clean {
-  delete "" + buildDir + "/" +  project.name
+
+task test {
+  dependsOn runUnitTests, processCSVs
 }
+
+task clean {
+  dependsOn removeOdooWithCompose
+  delete buildDir.getAbsolutePath()
+}
+
 task assemble {
   dependsOn archiveSources
 }
 
 task build {
   dependsOn(test, assemble)
-} 
+}

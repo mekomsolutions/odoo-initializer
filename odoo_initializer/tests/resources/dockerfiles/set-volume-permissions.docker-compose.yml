@@ -1,0 +1,11 @@
+version: '3'
+services:
+  odoo:
+    image: busybox
+    command: 'chown 105:105 -R /data /checksums'
+    volumes:
+      - odoo-filestore:/data
+      - odoo-checksums:/checksums
+volumes:
+   odoo-filestore:
+   odoo-checksums:

@@ -1,0 +1,21 @@
+version: '3'
+services:
+  odoo:
+    image: odoo:10.0
+    command: -d odoo --stop-after-init
+    volumes:
+      - odoo-filestore:/var/lib/odoo/filestore
+      - ${sources}:/mnt/extra-addons/odoo_initializer
+      - ${testResources}/config:/etc/odoo
+      - ${testResources}/odoo_csv:/mnt/csv/odoo_csv
+      - ${testResources}/openmrs_csv:/mnt/csv/openmrs_csv
+      - odoo-checksums:/mnt/csv/checksums
+  db:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+volumes:
+   odoo-filestore:
+   odoo-checksums:
