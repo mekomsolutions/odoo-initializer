@@ -22,6 +22,10 @@ class Config:
             self.db_name = odoo.tools.config["db_name"]
         except KeyError:
             pass
+        try:
+            self.checksum_folder = odoo.tools.config["initializer_checksums"]
+        except KeyError:
+            self.checksum_folder = None
 
 
 config = Config()
