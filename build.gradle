@@ -36,7 +36,7 @@ task removeOdooWithCompose (type: Exec) {
 task runDbDetached (type: Exec) {
   dependsOn copyTestResources
   workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/run-db.docker-compose.yml', 'up', '--detach'
+  commandLine 'docker-compose', '-f', 'dockerfiles/run-db.docker-compose.yml', 'up', '-d'
 }
 
 task initializeDb (type: Exec) {

@@ -1,0 +1,7 @@
+language: groovy
+
+services:
+  - docker
+
+script:
+- ./gradlew clean test
