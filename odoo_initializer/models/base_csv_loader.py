@@ -15,11 +15,8 @@ class BaseCsvLoader:
         pass
 
     model_name = None
-    _model = None
     fields = None
     test = False
-    data_files_source = "odoo"  # ["openmrs, "odoo"]
-    update_existing_record = False
     allowed_file_extensions = [".csv"]
     field_mapping = None
     folder = None
@@ -27,7 +24,6 @@ class BaseCsvLoader:
 
     def load_files(self, relevant_folder):
         return data_files.get_files(
-            self.data_files_source,
             relevant_folder,
             allowed_extensions=self.allowed_file_extensions,
         )
