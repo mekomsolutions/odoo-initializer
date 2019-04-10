@@ -62,7 +62,7 @@ class DataFilesUtils:
     def file_already_processed(self, file_):
         file_name = basename(file_)
         file_dir = split(dirname(file_))[1]
-        checksum_dir = split(dirname(file_))[0] + "_checksum"
+        checksum_dir = config.checksum_folder or (split(dirname(file_))[0] + "_checksum")
         checksum_path = os.path.join(checksum_dir, file_dir, file_name) + ".checksum"
         md5 = self.md5(file_)
         if os.path.exists(checksum_path):
