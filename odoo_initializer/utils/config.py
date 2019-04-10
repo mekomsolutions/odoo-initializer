@@ -23,7 +23,7 @@ class Config:
         except KeyError:
             pass
         try:
-            self.checksum_folder = odoo.tools.config["initializer_checksums"]
+            self.checksum_folder = odoo.tools.config["initializer_checksums_path"]
         except KeyError:
             self.checksum_folder = None
 
