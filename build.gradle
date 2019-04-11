@@ -2,8 +2,6 @@ buildDir = file(project.projectDir.absolutePath + "/build/")
 def odooRepoUrl = "https://github.com/odoo/odoo.git"
 def testResourcesDir = file(buildDir.getAbsolutePath()   + "/tests/resources/")
 def initzDir = file(project.projectDir.absolutePath + "/" + project.name + "/")
-def filestore = file("/tmp/tests/filestore")
-//def filestore = file(buildDir.getAbsolutePath() + "/tests/filestore")
 
 def getVersion = {
   def stdout = new ByteArrayOutputStream()
@@ -24,7 +22,7 @@ task removeOdoo (type: Exec) {
 task copyTestResources(type: Copy) {
   from initzDir.getAbsolutePath() + "/tests/resources/"
   into testResourcesDir
-  expand(testResources: testResourcesDir.getAbsolutePath(), sources: initzDir.getAbsolutePath() , filestore: filestore.getAbsolutePath())
+  expand(testResources: testResourcesDir.getAbsolutePath(), sources: initzDir.getAbsolutePath())
 }
 
 task removeOdooWithCompose (type: Exec) {
@@ -66,6 +64,12 @@ task installExtras (type: Exec) {
 task processCSVs (type: Exec) {
   dependsOn copyTestResources, installExtras
   workingDir testResourcesDir
+  commandLine 'docker-compose', '-f', 'dockerfiles/process-csvs.docker-compose.yml', 'up', '--abort-on-container-exit'
+}
+
+task runOdoo (type: Exec) {
+  dependsOn installExtras
+  workingDir testResourcesDir
   commandLine 'docker-compose', '-f', 'dockerfiles/run-with-csvs.docker-compose.yml', 'up', '--abort-on-container-exit'
 }
 
@@ -83,7 +87,6 @@ task archiveSources(type: Zip) {
   destinationDirectory = buildDir
 }
 
-
 task test {
   dependsOn runUnitTests, processCSVs
 }
@@ -91,6 +94,10 @@ task test {
 task clean {
   dependsOn removeOdooWithCompose
   delete buildDir.getAbsolutePath()
+}
+
+task run (type: Exec) {
+  dependsOn runOdoo
 }
 
 task assemble {
