@@ -24,8 +24,7 @@ class BaseCsvLoader:
 
     def load_files(self, relevant_folder):
         return data_files.get_files(
-            relevant_folder,
-            allowed_extensions=self.allowed_file_extensions,
+            relevant_folder, allowed_extensions=self.allowed_file_extensions
         )
 
     def load_file(self, file_):

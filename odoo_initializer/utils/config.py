@@ -7,7 +7,9 @@ _logger = logging.getLogger(__name__)
 class Config:
     def __init__(self):
         try:
-            data_files_paths_property = odoo.tools.config["initializer_data_files_paths"]
+            data_files_paths_property = odoo.tools.config[
+                "initializer_data_files_paths"
+            ]
             self.data_files_paths = data_files_paths_property.split(",")
         except KeyError:
             _logger.warn("'initializer_data_files_paths' property is not set")
