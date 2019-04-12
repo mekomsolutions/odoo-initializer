@@ -7,17 +7,13 @@ _logger = logging.getLogger(__name__)
 class Config:
     def __init__(self):
         try:
-            self.openmrs_path = odoo.tools.config["openmrs_initializer_path"]
+            data_files_paths_property = odoo.tools.config[
+                "initializer_data_files_paths"
+            ]
+            self.data_files_paths = data_files_paths_property.split(",")
         except KeyError:
-            self.openmrs_path = None
-            _logger.warn("'openmrs_initializer_path' variable is not set")
-        try:
-            self.odoo_path = odoo.tools.config["odoo_initializer_path"]
-        except KeyError:
-            _logger.warn(
-                "'odoo_initializer_path' is not set, using 'data_dir' path as default"
-            )
-            self.odoo_path = odoo.tools.config["data_dir"]
+            _logger.warn("'initializer_data_files_paths' property is not set")
+            self.data_files_paths = []
         try:
             self.db_name = odoo.tools.config["db_name"]
         except KeyError:

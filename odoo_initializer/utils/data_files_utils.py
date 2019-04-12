@@ -3,8 +3,7 @@ import os
 import hashlib
 import csv
 import tempfile
-import xml.etree.ElementTree as ET
-from lxml import  objectify
+from lxml import objectify
 
 from .config import config
 
@@ -36,34 +35,42 @@ class DataFilesUtils:
         tree = objectify.fromstring(file_content)
         return tree
 
-    def get_files(self, data_files_source, folder, allowed_extensions):
+    def get_files(self, folder, allowed_extensions):
         import_files = []
-        if not self.get_data_folder_path(data_files_source):
-            _logger.warn(ValueError("Invalid config path"))
-            return []
-        path = os.path.join(self.get_data_folder_path(data_files_source), folder)
-        _logger.info("path:" + path)
-        for root, dirs, files in os.walk(path):
-            for file_ in files:
-                file_path = os.path.join(path, file_)
+        for data_files_source in config.data_files_paths:
+            path = os.path.join(data_files_source, folder)
+            _logger.info("path:" + path)
+            for root, dirs, files in os.walk(path):
+                for file_ in files:
+                    file_path = os.path.join(path, file_)
 
-                filename, ext = os.path.splitext(file_)
-                if str(ext).lower() in allowed_extensions:
-                    if self.file_already_processed(file_path):
-                        _logger.info("Skipping already processed file: " + str(file_))
-                        continue
-                    with open(os.path.join(path, file_), "r") as file_data:
-                        if ".csv" in allowed_extensions:
-                            import_files.append(self.get_csv_content(file_data))
-                        elif ".xml" in allowed_extensions:
-                            import_files.append()
+                    filename, ext = os.path.splitext(file_)
+                    if str(ext).lower() in allowed_extensions:
+                        if self.file_already_processed(file_path):
+                            _logger.info(
+                                "Skipping already processed file: " + str(file_)
+                            )
+                            continue
+                        with open(os.path.join(path, file_), "r") as file_data:
+                            if ".csv" in allowed_extensions:
+                                import_files.append(self.get_csv_content(file_data))
+                            elif ".xml" in allowed_extensions:
+                                import_files.append(self.get_xml_content(file_data))
         return import_files
 
-    def file_already_processed(self, file_):
+    @staticmethod
+    def get_checksum_path(file_):
         file_name = basename(file_)
         file_dir = split(dirname(file_))[1]
-        checksum_dir = config.checksum_folder or (split(dirname(file_))[0] + "_checksum")
+        checksum_dir = config.checksum_folder or (
+            split(dirname(file_))[0] + "_checksum"
+        )
         checksum_path = os.path.join(checksum_dir, file_dir, file_name) + ".checksum"
+
+        return checksum_path
+
+    def file_already_processed(self, file_):
+        checksum_path = self.get_checksum_path(file_)
         md5 = self.md5(file_)
         if os.path.exists(checksum_path):
             with open(checksum_path, "r") as f:

@@ -6,7 +6,7 @@ from ..models import BaseCsvLoader
 _logger = logging.getLogger(__name__)
 
 
-class TestOpenmrsLoader(tests.TransactionCase):
+class TestLoader(tests.TransactionCase):
 
     _test_model = "res.partner"
 
