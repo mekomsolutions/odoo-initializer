@@ -1,6 +1,31 @@
+<img src="readme/crudem-hsc-logo.png" alt="hsc-logo" width="400"/>
+
+------
+
 # Odoo Initializer Add-on
 
-### Run tests
+### Introduction
+This add-on aims at providing a configuration layer to let implementers start an Odoo server with a given set of pre-loaded settings and metadata, that is versioned controlled.
+
+Settings and metadata will be loaded onto the Odoo server based on what is provided in the data files.
+
+Those data files are mostly in CSV and XML formats, depending of the model that is loaded.
+
+They are processed when the add-on is installed.
+
+### Supported models:
+
+See below the list of supported models:
+- [Company Property (CSV)](./readme/company_property.md)
+- [Drug (CSV)](./readme/drug.md)
+- [Fiscal Position (CSV)](./readme/fiscal_position.md)
+- [Journal (CSV)](./readme/journal.md)
+- [Payment (CSV)](./readme/payment.md)
+- [Price List (CSV)](./readme/price_list.md)
+- [Stock (CSV)](./readme/stock.md)
+
+----
+### Run add-on tests
 
 Project tests should be run using the following Gradle command:
 ```
@@ -24,4 +49,5 @@ You can run those 2 tasks independently if you which only run tests partially
 ```
 ```
 ./gradlew clean processCSVs
+
 ```
