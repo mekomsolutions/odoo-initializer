@@ -3,7 +3,7 @@
 The `company_property` subfolder allows to import Company Properties provided as CSV files. See the example below:
 
 | id | 	name |	res_id |	type |	fields_id/id |
-| -
+| - | - | - | - | - |
 | ir_property_114 |	property_stock_journal 	||	Many2One |	stock_account.field_product_category_property_stock_journal |
 
 

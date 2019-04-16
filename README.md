@@ -20,9 +20,9 @@ See below the list of supported models:
 - [Drug (CSV)](./readme/drug.md)
 - [Fiscal Position (CSV)](./readme/fiscal_position.md)
 - [Journal (CSV)](./readme/journal.md)
-- [Payment (CSV)](./readme/payment.md)
+- [Payment (CSV)](./readme/payment_term.md)
 - [Price List (CSV)](./readme/price_list.md)
-- [Stock (CSV)](./readme/stock.md)
+- [Stock (CSV)](./readme/stock_location.md)
 
 ----
 ### Run add-on tests

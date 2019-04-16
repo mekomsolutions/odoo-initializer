@@ -23,7 +23,7 @@ field_mapping = {
 See the example below:
 
 | id | 	name |	Fully specified name:en |	odoo_price |
-| - | - | - | - | - |
+| - | - | - | - |
 | 1 | Paracetamol 500mg | paracetamol | 120
 | 2 | Panadol | paracetamol | 200
 | 3 | Metacin 1g | paracetamol | 300
