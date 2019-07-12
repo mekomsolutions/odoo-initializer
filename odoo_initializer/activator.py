@@ -1,5 +1,7 @@
 import logging
 
+from .models.partner_loader import PartnerLoader
+from .models.company_loader import CompanyLoader
 from .models.company_property_loader import CompanyPropertyLoader
 from .models.stock_location_loader import StockLocationLoader
 from .models.payment_term_loader import PaymentTermLoader
@@ -15,6 +17,8 @@ _logger.info("start initialization process")
 
 registered_loaders = [
     FiscalPositionLoader,
+    PartnerLoader,
+    CompanyLoader,
     AccountLoader,
     JournalLoader,
     PaymentTermLoader,

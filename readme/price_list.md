@@ -8,4 +8,4 @@ The `price_list` subfolder allows to import Price Lists provided as CSV files. S
 
 
 See the test resources for further examples:
-- [odoo_csv/price_list/product.pricelist.csv](../odoo_initializer/tests/resources/odoo_csv/price_list/product.pricelist.csv)
+- [odoo_csv/pricelist/product.pricelist.csv](../odoo_initializer/tests/resources/odoo_csv/pricelist/product.pricelist.csv)

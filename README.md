@@ -23,6 +23,8 @@ See below the list of supported models:
 - [Payment (CSV)](./readme/payment_term.md)
 - [Price List (CSV)](./readme/price_list.md)
 - [Stock (CSV)](./readme/stock_location.md)
+- [Company (CSV)](./readme/company.md)
+- [Partner (CSV)](./readme/partner.md)
 
 ----
 ### Run add-on tests
