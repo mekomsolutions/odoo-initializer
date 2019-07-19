@@ -9,6 +9,7 @@ from .models.price_list_loader import PriceListLoader
 from .models.account_loader import AccountLoader
 from .models.journal_loader import JournalLoader
 from .models.fiscal_position_loader import FiscalPositionLoader
+from .models.sale_shop_loader import SaleShopLoader
 from .models.drug_loader import DrugLoader
 
 _logger = logging.getLogger(__name__)
@@ -25,6 +26,7 @@ registered_loaders = [
     StockLocationLoader,
     DrugLoader,
     PriceListLoader,
+    SaleShopLoader,
     CompanyPropertyLoader,
 ]
 
