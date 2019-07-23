@@ -34,22 +34,39 @@ Project tests should be run using the following Gradle command:
 ./gradlew clean test
 ```
 
-Once the tests have run, you may want to run `./gradlew clean` again to make sure all the resources are destroyed (containers, volumes, folders)
+Once the tests have run, you may want to run `./gradlew cleanDocker` to make sure all the resources are destroyed (containers, volumes, folders)
 
-### Run the tests and let the Odoo server running
-If you are willing to leave the server running after the tests are run, use:
+### Install and Deploy on the Nexus repository
+
+Install the archive locally:
 ```
-./gradlew clean test run
+./gradlew clean install
 ```
-The Odoo server will be accessible at http://localhost:8069
+
+Deploy on Nexus (Snaphsot & Release)
+
+```
+# Prompt for Nexus username and password
+read -p "Nexus username: " user; export NEXUS_USER=$user; read -sp "Nexus password: " password; export NEXUS_PASSWORD=$password; echo ""
+```
+
+Deploy on Nexus:
+```
+./gradlew publish -Puser=${NEXUS_USER} -Ppassword=${NEXUS_PASSWORD}
+```
 
 ### Additional info
-The `test` Gradle task will in fact run 2 substasks: **runUnitTests** and **processCSVs**
-You can run those 2 tasks independently if you which only run tests partially
+- The `test` Gradle task will in fact run 2 substasks: **runUnitTests** and **processCSVs**.
+You can run those 2 tasks independently if you which.
 ```
 ./gradlew clean runUnitTests
 ```
 ```
 ./gradlew clean processCSVs
-
 ```
+
+- If you are willing to leave the Odoo server running after running the tests, use:
+```
+./gradlew clean test run
+```
+The Odoo server will be accessible at http://localhost:8069

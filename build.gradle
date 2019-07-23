@@ -1,109 +1,197 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
 buildDir = file(project.projectDir.absolutePath + "/build/")
 def odooRepoUrl = "https://github.com/odoo/odoo.git"
-def testResourcesDir = file(buildDir.getAbsolutePath()   + "/tests/resources/")
+def testResourcesDir = file(buildDir.getAbsolutePath() + "/tests/resources/")
 def initzDir = file(project.projectDir.absolutePath + "/" + project.name + "/")
 
 def getVersion = {
-  def stdout = new ByteArrayOutputStream()
-  exec {
-    workingDir project.projectDir.absolutePath + "/" + project.name + "/"
-    commandLine 'python', '-c', 'import sys; import ast; file = open("__manifest__.py"); manifest = ast.literal_eval(file.read()); sys.stdout.write(manifest["version"])'
-    standardOutput = stdout
-  }
-  return stdout.toString()
+	def stdout = new ByteArrayOutputStream()
+	exec {
+		workingDir project.projectDir.absolutePath + "/" + project.name + "/"
+		commandLine 'python',
+		'-c',
+		'import sys; import ast; file = open("__manifest__.py"); manifest = ast.literal_eval(file.read()); sys.stdout.write(manifest["version"])'
+		standardOutput = stdout
+	}
+	return stdout.toString()
 }
 
 project.version = getVersion()
 
-task removeOdoo (type: Exec) {
-  commandLine 'docker', 'rm', '-vf', 'dockerfiles_odoo_1'
+task removeOdoo(type: Exec) {
+	commandLine 'docker',
+	'rm',
+	'-vf',
+	'dockerfiles_odoo_1'
 }
 
 task copyTestResources(type: Copy) {
-  from initzDir.getAbsolutePath() + "/tests/resources/"
-  into testResourcesDir
-  expand(testResources: testResourcesDir.getAbsolutePath(), sources: initzDir.getAbsolutePath())
+	from initzDir.getAbsolutePath() + "/tests/resources/"
+	into testResourcesDir
+	expand(testResources: testResourcesDir.getAbsolutePath(), sources: initzDir.getAbsolutePath())
 }
 
-task removeOdooWithCompose (type: Exec) {
-  dependsOn copyTestResources
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/initialize-db.docker-compose.yml', 'down', '-v'
+task removeOdooWithCompose(type: Exec) {
+	dependsOn copyTestResources
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/initialize-db.yml',
+	'down',
+	'-v'
 }
 
-task runDbDetached (type: Exec) {
-  dependsOn copyTestResources
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/run-db.docker-compose.yml', 'up', '-d'
+task runDbDetached(type: Exec) {
+	dependsOn copyTestResources
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/run-db.yml',
+	'up',
+	'-d'
 }
 
-task initializeDb (type: Exec) {
-  dependsOn copyTestResources, runDbDetached
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/initialize-db.docker-compose.yml', 'up', '--abort-on-container-exit'
+task initializeDb(type: Exec) {
+	dependsOn copyTestResources,
+	runDbDetached
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/initialize-db.yml',
+	'up',
+	'--abort-on-container-exit'
 }
 
-task runUnitTests (type: Exec) {
-  dependsOn initializeDb
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/run-unit-tests.docker-compose.yml', 'up', '--abort-on-container-exit'
+task runUnitTests(type: Exec) {
+	dependsOn initializeDb
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/run-unit-tests.yml',
+	'up',
+	'--abort-on-container-exit'
 }
 
-task setVolumePermissions (type:Exec) {
-  dependsOn runDbDetached
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/set-volume-permissions.docker-compose.yml', 'up', '--abort-on-container-exit'
+task setVolumePermissions(type: Exec) {
+	dependsOn runDbDetached
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/set-volume-permissions.yml',
+	'up',
+	'--abort-on-container-exit'
 }
 
-task installExtras (type: Exec) {
-  dependsOn setVolumePermissions
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/install-extras.docker-compose.yml', 'up', '--abort-on-container-exit'
+task installBaseAddons(type: Exec) {
+	dependsOn setVolumePermissions
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/install-base-addons.yml',
+	'up',
+	'--abort-on-container-exit'
 }
 
-task processCSVs (type: Exec) {
-  dependsOn copyTestResources, installExtras
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/process-csvs.docker-compose.yml', 'up', '--abort-on-container-exit'
+task processCSVs(type: Exec) {
+	dependsOn copyTestResources,
+	installBaseAddons
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/process-csvs.yml',
+	'up',
+	'--abort-on-container-exit'
 }
 
-task runOdoo (type: Exec) {
-  dependsOn installExtras
-  workingDir testResourcesDir
-  commandLine 'docker-compose', '-f', 'dockerfiles/run-with-csvs.docker-compose.yml', 'up', '--abort-on-container-exit'
+task runOdoo(type: Exec) {
+	dependsOn installBaseAddons
+	workingDir testResourcesDir
+	commandLine 'docker-compose',
+	'-f',
+	'dockerfiles/run-with-csvs.yml',
+	'up',
+	'--abort-on-container-exit'
 }
 
 task copySources(type: Copy) {
-  from "./" + project.name + "/"
-  exclude "tests"
-  into "" + buildDir + "/" + project.name + "/"
+	from "./" + project.name + "/"
+	exclude "tests"
+	into "" + buildDir + "/" + project.name + "/"
 }
 
-task archiveSources(type: Zip) {
-  dependsOn copySources
-  archiveBaseName = project.name
-  archiveVersion = getVersion()
-  from "" + buildDir + "/" +  project.name + "/"
-  destinationDirectory = buildDir
+task packageSources(type: Zip) {
+	dependsOn copySources
+	archiveBaseName = project.name
+	archiveVersion = getVersion()
+	from buildDir
+  include project.name + '/*'
+	destinationDirectory = buildDir
 }
 
-task test {
-  dependsOn runUnitTests, processCSVs
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			version = getVersion()
+			artifactId = project.name
+			groupId = "net.mekomsolutions.odoo"
+			// packaging = "zip"
+			from components.java
+			artifact packageSources
+			pom {
+				name = 'Odoo Initializer'
+				description = 'Odoo add-on to import data provided as CSVs, loaded from a location on the server disk.'
+				url = 'https://github.com/mekomsolutions/odoo-initializer'
+				licenses {
+					license {
+						name = 'M.I.T'
+						url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+				scm {
+					connection = 'scm:git:git://github.com/mekomsolutions/odoo-initializer.git'
+					developerConnection = 'scm:git:ssh://github.com/mekomsolutions/odoo-initializer.git'
+					url = 'https://github.com/mekomsolutions/odoo-initializer'
+				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			credentials {
+				username project.findProperty("user") ?: ""
+				password project.findProperty("password") ?: ""
+			}
+			def releasesRepoUrl = "https://nexus.mekomsolutions.net/repository/maven-releases"
+			def snapshotsRepoUrl = "https://nexus.mekomsolutions.net/repository/maven-snapshots"
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl: releasesRepoUrl
+		}
+	}
 }
 
-task clean {
+test {
+	dependsOn runUnitTests,
+	processCSVs
+}
+
+task cleanDocker {
   dependsOn removeOdooWithCompose
-  delete buildDir.getAbsolutePath()
 }
 
-task run (type: Exec) {
-  dependsOn runOdoo
+clean {
+	delete buildDir.getAbsolutePath()
 }
 
-task assemble {
-  dependsOn archiveSources
+task run(type: Exec) {
+	dependsOn runOdoo
 }
 
-task build {
-  dependsOn(test, assemble)
+install {
+  dependsOn publishMavenJavaPublicationToMavenLocal
+}
+
+build {
+	dependsOn(test, install)
 }
