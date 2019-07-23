@@ -36,7 +36,9 @@ class BaseCsvLoader:
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
+                _logger.warn("fetching model")
                 model = env["base_import.import"]
+                _logger.warn("creating data")
                 import_wizard = model.create(
                     {
                         "res_model": self.model_name,
@@ -44,9 +46,11 @@ class BaseCsvLoader:
                         "file_type": "text/csv",
                     }
                 )
+                _logger.warn("starting import")
                 result = import_wizard.do(
                     self.fields, {"quoting": '"', "separator": ",", "headers": True}
                 )
+                _logger.warn("import done")
         return result
 
     def _validate_mapping(self, mapping, file_header):
@@ -102,9 +106,23 @@ class BaseCsvLoader:
         mapped_csv = data_files.build_csv(mapped_dict)
         return mapped_csv
 
+    def _model_exist(self):
+        with api.Environment.manage():
+            registry = odoo.modules.registry.RegistryManager.get(config.db_name)
+            if not self.test:
+                registry.delete_all()
+            with registry.cursor() as cr:
+                uid = odoo.SUPERUSER_ID
+                env = Environment(cr, uid, {})
+                if self.model_name in env:
+                    return True
+                return False
+
     def load_(self):
         _logger.info("file loading")
         for file_ in self.load_files(self.folder):
-            mapped_file = self._mapper(file_, self.field_mapping, self.filters)
-
-            self.load_file(mapped_file)
+            if self._model_exist():
+                mapped_file = self._mapper(file_, self.field_mapping, self.filters)
+                self.load_file(mapped_file)
+            else:
+                _logger.warn('the model"' + self.model_name + '" does not exist')
