@@ -2,15 +2,16 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-buildDir = file(project.projectDir.absolutePath + "/build/")
+buildDir = file(project.projectDir.getAbsolutePath() + "/build/")
+def generatedPom = file(project.projectDir.getAbsolutePath() + "/generated-pom.xml")
 def odooRepoUrl = "https://github.com/odoo/odoo.git"
 def testResourcesDir = file(buildDir.getAbsolutePath() + "/tests/resources/")
-def initzDir = file(project.projectDir.absolutePath + "/" + project.name + "/")
+def initzDir = file(project.projectDir.getAbsolutePath() + "/" + project.name + "/")
 
 def getVersion = {
 	def stdout = new ByteArrayOutputStream()
 	exec {
-		workingDir project.projectDir.absolutePath + "/" + project.name + "/"
+		workingDir project.projectDir.getAbsolutePath() + "/" + project.name + "/"
 		commandLine 'python',
 		'-c',
 		'import sys; import ast; file = open("__manifest__.py"); manifest = ast.literal_eval(file.read()); sys.stdout.write(manifest["version"])'
@@ -153,11 +154,6 @@ publishing {
 		mavenJava(MavenPublication) {
 			from components.java
 			artifact packageSources
-			pom {
-				name = 'Odoo Initializer'
-				description = 'Odoo add-on to import data provided as CSVs, loaded from a location on the server disk.'
-				url = 'https://github.com/mekomsolutions/odoo-initializer'
-			}
 		}
 	}
 	repositories {
@@ -181,9 +177,20 @@ publishing {
 	}
 }
 
+task createPom {
+	doLast {
+    pom {
+        project {
+            groupId project.group
+            artifactId project.name
+            version project.version
+        }
+    }.writeTo(generatedPom.getAbsolutePath())
+	}
+}
+
 test {
-	dependsOn runUnitTests,
-	processCSVs
+	dependsOn runUnitTests, processCSVs
 }
 
 task cleanDocker {
@@ -192,6 +199,7 @@ task cleanDocker {
 
 clean {
 	delete buildDir.getAbsolutePath()
+	delete generatedPom.getAbsolutePath()
 }
 
 task run(type: Exec) {
@@ -199,7 +207,7 @@ task run(type: Exec) {
 }
 
 install {
-  dependsOn publishMavenJavaPublicationToMavenLocal
+  dependsOn createPom, publishMavenJavaPublicationToMavenLocal
 }
 
 build {
