@@ -127,9 +127,9 @@ task copySources(type: Copy) {
 task packageSources(type: Zip) {
 	dependsOn copySources
 	archiveBaseName = project.name
-	archiveVersion = getVersion()
+	archiveVersion = project.version
 	from buildDir
-  include project.name + '/*'
+  include project.name + '/**/*'
 	destinationDirectory = buildDir
 }
 
