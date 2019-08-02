@@ -20,6 +20,7 @@ def getVersion = {
 }
 
 project.version = getVersion()
+project.group = "net.mekomsolutions.odoo"
 
 task removeOdoo(type: Exec) {
 	commandLine 'docker',
@@ -131,42 +132,51 @@ task packageSources(type: Zip) {
 	destinationDirectory = buildDir
 }
 
+def getMavenSettingsCredentials = {
+    String userHome = System.getProperty( "user.home" );
+    File mavenSettings = new File(userHome, ".m2/settings.xml")
+    def xmlSlurper = new XmlSlurper()
+    def output = xmlSlurper.parse(mavenSettings)
+    return output."servers"."server"
+}
+def getCredentials = { serverName ->
+    def entries = getMavenSettingsCredentials()
+    for (entry in entries) {
+        if ( entry."id".text() == serverName ) {
+            return [username: entry.username.text(), password: entry.password.text()]
+    }
+  }
+}
+
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			version = getVersion()
-			artifactId = project.name
-			groupId = "net.mekomsolutions.odoo"
-			// packaging = "zip"
 			from components.java
 			artifact packageSources
 			pom {
 				name = 'Odoo Initializer'
 				description = 'Odoo add-on to import data provided as CSVs, loaded from a location on the server disk.'
 				url = 'https://github.com/mekomsolutions/odoo-initializer'
-				licenses {
-					license {
-						name = 'M.I.T'
-						url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-					}
-				}
-				scm {
-					connection = 'scm:git:git://github.com/mekomsolutions/odoo-initializer.git'
-					developerConnection = 'scm:git:ssh://github.com/mekomsolutions/odoo-initializer.git'
-					url = 'https://github.com/mekomsolutions/odoo-initializer'
-				}
 			}
 		}
 	}
 	repositories {
 		maven {
 			credentials {
-				username project.findProperty("user") ?: ""
-				password project.findProperty("password") ?: ""
+				def usernameFromSettingsXML = null
+				def passwordFromSettingsXML = null
+				if (project.findProperty("repoId")) {
+					def creds = getCredentials(project.findProperty("repoId"))
+					usernameFromSettingsXML = creds["username"]
+					passwordFromSettingsXML = creds["password"]
+				}
+				username project.findProperty("user") ?: usernameFromSettingsXML
+				password project.findProperty("password") ?: passwordFromSettingsXML
 			}
 			def releasesRepoUrl = "https://nexus.mekomsolutions.net/repository/maven-releases"
 			def snapshotsRepoUrl = "https://nexus.mekomsolutions.net/repository/maven-snapshots"
-			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl: releasesRepoUrl
+			def nexusUrl = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl: releasesRepoUrl
+			url = project.findProperty("url") ?: nexusUrl
 		}
 	}
 }
