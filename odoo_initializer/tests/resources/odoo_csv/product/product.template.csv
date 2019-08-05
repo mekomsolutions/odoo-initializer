@@ -1,0 +1,2 @@
+id,name,type,product_variant_ids/categ_id/id
+init.testProduct,My Product,service,product.product_category_all

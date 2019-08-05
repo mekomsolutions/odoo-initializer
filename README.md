@@ -26,6 +26,7 @@ See below the list of supported models:
 - [Company (CSV)](./readme/company.md)
 - [Partner (CSV)](./readme/partner.md)
 - [Shop (CSV)](./readme/sale_shop.md) (Bahmni specific)
+- [Product (CSV)](./readme/product.md)
 
 ----
 ### Run add-on tests
