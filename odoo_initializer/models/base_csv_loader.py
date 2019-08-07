@@ -36,9 +36,7 @@ class BaseCsvLoader:
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
-                _logger.warn("fetching model")
                 model = env["base_import.import"]
-                _logger.warn("creating data")
                 import_wizard = model.create(
                     {
                         "res_model": self.model_name,
@@ -46,11 +44,10 @@ class BaseCsvLoader:
                         "file_type": "text/csv",
                     }
                 )
-                _logger.warn("starting import")
                 result = import_wizard.do(
                     self.fields, {"quoting": '"', "separator": ",", "headers": True}
                 )
-                _logger.warn("import done")
+                _logger.info("import done")
         return result
 
     def _validate_mapping(self, mapping, file_header):
@@ -114,10 +111,8 @@ class BaseCsvLoader:
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
                 env = Environment(cr, uid, {})
-                if self.model_name in env:
-                    return True
-                return False
-
+                return self.model_name in env
+                
     def load_(self):
         _logger.info("file loading")
         for file_ in self.load_files(self.folder):
