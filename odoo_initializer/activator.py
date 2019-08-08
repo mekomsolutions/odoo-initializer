@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 _logger.info("start initialization process")
 
 registered_loaders = [
-    CountryLoader
+    CountryLoader,
     FiscalPositionLoader,
     PartnerLoader,
     CompanyLoader,
