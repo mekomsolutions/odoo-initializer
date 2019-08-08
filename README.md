@@ -16,6 +16,7 @@ They are processed when the add-on is installed.
 ### Supported models:
 
 See below the list of supported models:
+- [Country (CSV)](./readme/country.md)
 - [Company Property (CSV)](./readme/company_property.md)
 - [Drug (CSV)](./readme/drug.md)
 - [Fiscal Position (CSV)](./readme/fiscal_position.md)

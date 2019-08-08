@@ -1,6 +1,6 @@
 ### Model `product`
 
-The `product` subfolder allows to import Sale shops provided as CSV files. See the example below:
+The `product` subfolder allows to import products provided as CSV files. See the example below:
 
 | id | name | type | product_variant_ids/categ_id/id 
 | - | - | - | - | - | - | - | - | - | - | - | - |

@@ -1,5 +1,6 @@
 import logging
 
+from .models.country_loader import CountryLoader
 from .models.partner_loader import PartnerLoader
 from .models.company_loader import CompanyLoader
 from .models.company_property_loader import CompanyPropertyLoader
@@ -18,6 +19,7 @@ _logger = logging.getLogger(__name__)
 _logger.info("start initialization process")
 
 registered_loaders = [
+    CountryLoader,
     FiscalPositionLoader,
     PartnerLoader,
     CompanyLoader,
