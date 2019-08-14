@@ -13,6 +13,10 @@ from .models.fiscal_position_loader import FiscalPositionLoader
 from .models.sale_shop_loader import SaleShopLoader
 from .models.drug_loader import DrugLoader
 from .models.product_loader import ProductLoader
+from .models.order_type_loader import OrderTypeLoader
+from .models.shop_mapping_loader import ShopMappingLoader
+from .models.system_parameter_loader import SystemParameterLoader
+from .models.default_value_loader import DefaultValueLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -31,7 +35,11 @@ registered_loaders = [
     ProductLoader,
     PriceListLoader,
     SaleShopLoader,
+    OrderTypeLoader,
+    ShopMappingLoader,
+    DefaultValueLoader,
     CompanyPropertyLoader,
+    SystemParameterLoader,
 ]
 
 for registered_loader in registered_loaders:
