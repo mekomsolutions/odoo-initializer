@@ -17,6 +17,7 @@ They are processed when the add-on is installed.
 
 See below the list of supported models:
 - [Country (CSV)](./readme/country.md)
+- [System Parameter (CSV)](./readme/system_parameter.md)
 - [Company Property (CSV)](./readme/company_property.md)
 - [Drug (CSV)](./readme/drug.md)
 - [Fiscal Position (CSV)](./readme/fiscal_position.md)
@@ -28,6 +29,10 @@ See below the list of supported models:
 - [Partner (CSV)](./readme/partner.md)
 - [Shop (CSV)](./readme/sale_shop.md) (Bahmni specific)
 - [Product (CSV)](./readme/product.md)
+- [Order Type (CSV)](./readme/order_type.md) (Bahmni specific)
+- [Shop Mapping (CSV)](./readme/shop_mapping.md) (Bahmni specific)
+- [Default Value (CSV)](./readme/default_value.md)
+
 
 ----
 ### Run add-on tests
