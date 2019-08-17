@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Odoo initializer",
+    'name': "Odoo Initializer",
 
     'summary': """
-        Odoo data initializer""",
+        Odoo data Initializer""",
 
     'description': """
         Odoo add-on to import data provided as CSVs, loaded from a location on the server disk.
