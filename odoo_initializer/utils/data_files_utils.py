@@ -51,6 +51,9 @@ class DataFilesUtils:
                                 "Skipping already processed file: " + str(file_)
                             )
                             continue
+                        _logger.info(
+                                "processing file: " + str(file_)
+                            )
                         with open(os.path.join(path, file_), "r") as file_data:
                             if ".csv" in allowed_extensions:
                                 import_files.append(self.get_csv_content(file_data))

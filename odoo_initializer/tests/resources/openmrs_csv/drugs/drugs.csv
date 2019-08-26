@@ -1,4 +1,4 @@
-Uuid,Name,Concept Drug,odoo_price,odoo_category
-1,Paracetamol 500mg,paracetamol,120,product.product_category_all
-2,Panadol,paracetamol,200,product.product_category_all
-3,Metacin 1g,paracetamol,300,product.product_category_all
+Uuid,Name,Concept Drug,odoo_price,odoo_category,odoo_id,odoo_type
+1,Paracetamol 500mg,paracetamol,120,product.product_category_all,paracetamol_500mg,Stockable Product,
+2,Panadol,paracetamol,200,product.product_category_all,Panadol,Stockable Product
+3,Metacin 1g,paracetamol,300,product.product_category_all,Metacin_1g, Stockable Product

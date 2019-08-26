@@ -52,25 +52,17 @@ class BaseCsvLoader:
 
     def _validate_mapping(self, mapping, file_header):
         validated_mapping = {}
-        with api.Environment.manage():
-            registry = odoo.modules.registry.RegistryManager.get(config.db_name)
-            if not self.test:
-                registry.delete_all()
-            with registry.cursor() as cr:
-                uid = odoo.SUPERUSER_ID
-                env = Environment(cr, uid, {})
-                model = env[self.model_name]
-                model_fields = model.fields_get()
         if not mapping:
             for key in file_header:
                 validated_mapping[key] = key
         else:
             for field in mapping.items():
-                for model_field in model_fields.items():
-                    if field[0] == model_field[0]:
-                        validated_mapping[field[0]] = field[1]
-                        break
-
+                if field[1] in file_header:
+                    validated_mapping[field[0]] = field[1]
+                else:
+                    validated_mapping = {}
+                    _logger.warn("Skipping file import, Field '" + field[1] + "' is missing")
+                    break
         return validated_mapping
 
     def _mapper(self, file_, mapping, filters_):
