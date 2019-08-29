@@ -33,5 +33,3 @@ See the example below:
 `Note` :
 - All fields in the example are mandatory, if a field is missing the file import will be skipped
 
-See the test resources for further examples:
-- [openmrs_csv/drugs/drugs.csv](../odoo_initializer/tests/resources/openmrs_csv/drugs/drugs.csv)
