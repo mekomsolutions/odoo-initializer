@@ -13,22 +13,23 @@ The drug loader will apply a specific mapping to translate the OpenMRS Initializ
 [drug_loader.py#L6-L11](https://github.com/mekomsolutions/odoo-initializer/blob/ce149ea01c58c1101ee43f20d5dbcbad26a332af/odoo_initializer/models/drug_loader.py#L6-L11)
 ```
 field_mapping = {
-    "id": "Uuid",
+    "product_variant_ids/uuid": "Uuid",
     "name": "Name",
-    "drug": "Concept Drug",
     "lst_price": "odoo_price",
-    "categ_id/id": "odoo_category",
+    "product_variant_ids/categ_id/id": "odoo_category",
+    "type":"odoo_type",
+    "id": "odoo_id",
 }
 ```
 
 See the example below:
 
-| Uuid | 	Name |	Concept Drug |	odoo_price | odoo_category |
-| - | - | - | - | - |
-| 1 | Paracetamol 500mg | paracetamol | 120 | product.product_category_all |
-| 2 | Panadol | paracetamol | 200 | product.product_category_all |
-| 3 | Metacin 1g | paracetamol | 300 | product.product_category_all |
+| Uuid | 	Name |	Concept Drug |	odoo_price | odoo_category | odoo_id | odoo_type |
+| - | - | - | - | - | - | - |
+| 1 | Paracetamol 500mg | paracetamol | 120 | product.product_category_all | paracetamol_500mg | Stockable Product |
+| 2 | Panadol | paracetamol | 200 | product.product_category_all | Panadol | Stockable Product |
+| 3 | Metacin 1g | paracetamol | 300 | product.product_category_all | Metacin_1g | Stockable Product |
 
+`Note` :
+- All fields in the example are mandatory, if a field is missing the file import will be skipped
 
-See the test resources for further examples:
-- [openmrs_csv/drugs/drugs.csv](../odoo_initializer/tests/resources/openmrs_csv/drugs/drugs.csv)
