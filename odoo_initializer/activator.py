@@ -17,12 +17,14 @@ from .models.order_type_loader import OrderTypeLoader
 from .models.shop_mapping_loader import ShopMappingLoader
 from .models.system_parameter_loader import SystemParameterLoader
 from .models.default_value_loader import DefaultValueLoader
+from .models.currency_loader import CurrencyLoader
 
 _logger = logging.getLogger(__name__)
 
 _logger.info("start initialization process")
 
 registered_loaders = [
+    CurrencyLoader,
     CountryLoader,
     FiscalPositionLoader,
     PartnerLoader,
