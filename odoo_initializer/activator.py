@@ -18,6 +18,7 @@ from .models.shop_mapping_loader import ShopMappingLoader
 from .models.system_parameter_loader import SystemParameterLoader
 from .models.default_value_loader import DefaultValueLoader
 from .models.currency_loader import CurrencyLoader
+from .models.orders_loader import OrdersLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +35,7 @@ registered_loaders = [
     PaymentTermLoader,
     StockLocationLoader,
     DrugLoader,
+    OrdersLoader,
     ProductLoader,
     PriceListLoader,
     SaleShopLoader,
