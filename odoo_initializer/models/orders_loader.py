@@ -14,6 +14,6 @@ class OrdersLoader(BaseCsvLoader):
     }
     folder = "concepts"
     filters = {
-        "description": ["LabTest",
-                        "RadiologyTest"]
+        "Data class": ["LabTest",
+                       "Radiology"]
     }

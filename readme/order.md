@@ -1,6 +1,6 @@
-### Model `Order`
+### Model `concept`
 
-The `order` subfolder allows you to import Odoo products provided as CSV files.
+The `concept` subfolder allows you to import Odoo products provided as CSV files.
 It is designed specifically to load OpenMRS Initializer concepts type of files, ie, of a format compatible with [OpenMRS Module Initializer](https://github.com/mekomsolutions/openmrs-module-initializer/) concepts files.
 
 The order loader has been designed to allow OpenMRS and Odoo to share a common set of metadata and avoid maintaining 2 files.
