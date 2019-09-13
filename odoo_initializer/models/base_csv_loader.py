@@ -29,6 +29,8 @@ class BaseCsvLoader:
 
     def load_file(self, file_):
 
+        if not file_:
+            return []
         with api.Environment.manage():
             registry = odoo.modules.registry.RegistryManager.get(config.db_name)
             if not self.test:
@@ -69,31 +71,38 @@ class BaseCsvLoader:
         if not isinstance(filters_, dict):
             filters_ = {}
         mapped_dict = []
+        if not file_:
+            return []
         file_header = file_[0].keys()
 
         mapping = self._validate_mapping(mapping, file_header)
         self.fields = mapping.keys()
+
         for dict_line in file_:
-            row = {}
-            for key, value in mapping.items():
-                if value in dict_line.keys():
-                    row[key] = dict_line.pop(value)
+            to_map = False
 
             if not filters_:
-                mapped_dict.append(row)
+                to_map = True
 
             for filter_key, filter_value in filters_.items():
-                if filter_key in row.keys():
+                if filter_key in dict_line.keys():
                     filter_value = (
                         [filter_value]
                         if not isinstance(filter_value, list)
                         else filter_value
                     )
-                    if row[filter_key] in filter_value:
-                        mapped_dict.append(row)
+                    if dict_line[filter_key] in filter_value:
+                        to_map = True
 
-        mapped_csv = data_files.build_csv(mapped_dict)
-        return mapped_csv
+            # If the Line is not filtered out then we apply the mapping and add it
+            if to_map:
+                mapped_row = {}
+                for key, value in mapping.items():
+                    if value in dict_line.keys():
+                        mapped_row[key] = dict_line.pop(value)
+                mapped_dict.append(mapped_row)
+
+        return data_files.build_csv(mapped_dict) if mapped_dict else []
 
     def _model_exist(self):
         with api.Environment.manage():
