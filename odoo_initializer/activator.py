@@ -11,6 +11,7 @@ from .models.account_loader import AccountLoader
 from .models.journal_loader import JournalLoader
 from .models.fiscal_position_loader import FiscalPositionLoader
 from .models.sale_shop_loader import SaleShopLoader
+from .models.product_category_loader import ProductCategoryLoader
 from .models.drug_loader import DrugLoader
 from .models.product_loader import ProductLoader
 from .models.order_type_loader import OrderTypeLoader
@@ -24,6 +25,8 @@ _logger = logging.getLogger(__name__)
 
 _logger.info("start initialization process")
 
+# laoders are ordered based on dependency to each others
+
 registered_loaders = [
     CurrencyLoader,
     CountryLoader,
@@ -34,6 +37,7 @@ registered_loaders = [
     JournalLoader,
     PaymentTermLoader,
     StockLocationLoader,
+    ProductCategoryLoader,
     DrugLoader,
     OrdersLoader,
     ProductLoader,

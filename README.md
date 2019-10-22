@@ -30,6 +30,7 @@ See below the list of supported models:
 - [Partner (CSV)](./readme/partner.md)
 - [Shop (CSV)](./readme/sale_shop.md) (Bahmni specific)
 - [Product (CSV)](./readme/product.md)
+- [Product Category (CSV)](./readme/product_category.md)
 - [Order Type (CSV)](./readme/order_type.md) (Bahmni specific)
 - [Shop Mapping (CSV)](./readme/shop_mapping.md) (Bahmni specific)
 - [Default Value (CSV)](./readme/default_value.md)
