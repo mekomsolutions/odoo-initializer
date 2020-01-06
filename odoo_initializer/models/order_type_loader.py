@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class OrderTypeLoader(BaseCsvLoader):
+class OrderTypeLoader(BaseLoader):
     model_name = "order.type"
     folder = "order_type"
     filters = {}

@@ -1,11 +1,11 @@
 import logging
 
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 _logger = logging.getLogger(__name__)
 
 
-class PriceListLoader(BaseCsvLoader):
+class PriceListLoader(BaseLoader):
     model_name = "product.pricelist"
     folder = "pricelist"
 

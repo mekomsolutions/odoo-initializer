@@ -1,1 +1,1 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader

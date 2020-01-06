@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class CountryLoader(BaseCsvLoader):
+class CountryLoader(BaseLoader):
     model_name = "res.country"
     folder = "country"
     filters = {}

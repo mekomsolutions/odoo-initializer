@@ -34,6 +34,8 @@ See below the list of supported models:
 - [Order Type (CSV)](./readme/order_type.md) (Bahmni specific)
 - [Shop Mapping (CSV)](./readme/shop_mapping.md) (Bahmni specific)
 - [Default Value (CSV)](./readme/default_value.md)
+- [Language (XML)](./readme/language.md)
+
 
 
 ----

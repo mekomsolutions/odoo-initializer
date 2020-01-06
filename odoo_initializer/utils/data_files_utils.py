@@ -3,16 +3,15 @@ import os
 import hashlib
 import csv
 import tempfile
-from lxml import objectify
-
+import xml.etree.ElementTree as ET
+from os.path import dirname, basename, split
 from .config import config
 
 _logger = logging.getLogger(__name__)
 
-from os.path import dirname, basename, split
-
 
 class DataFilesUtils:
+
     @staticmethod
     def get_data_folder_path(data_files_source):
         data_files_source = data_files_source.lower()
@@ -32,7 +31,9 @@ class DataFilesUtils:
     @staticmethod
     def get_xml_content(file_data):
         file_content = file_data.read()
-        tree = objectify.fromstring(file_content)
+        tree = ET.ElementTree()
+        if file_content:
+            tree = ET.fromstring(file_content)
         return tree
 
     def get_files(self, folder, allowed_extensions):
@@ -43,7 +44,6 @@ class DataFilesUtils:
             for root, dirs, files in os.walk(path):
                 for file_ in files:
                     file_path = os.path.join(path, file_)
-
                     filename, ext = os.path.splitext(file_)
                     if str(ext).lower() in allowed_extensions:
                         if self.file_already_processed(file_path):
@@ -58,7 +58,8 @@ class DataFilesUtils:
                             if ".csv" in allowed_extensions:
                                 import_files.append(self.get_csv_content(file_data))
                             elif ".xml" in allowed_extensions:
-                                import_files.append(self.get_xml_content(file_data))
+                                xml_content = self.get_xml_content(file_data)
+                                import_files.append(xml_content)
         return import_files
 
     @staticmethod
