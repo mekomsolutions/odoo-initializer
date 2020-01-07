@@ -10,7 +10,7 @@ from ..utils.data_files_utils import data_files
 _logger = logging.getLogger(__name__)
 
 
-class BaseCsvLoader:
+class BaseLoader:
     def __init__(self):
         pass
 
@@ -73,6 +73,8 @@ class BaseCsvLoader:
         mapped_dict = []
         if not file_:
             return []
+        if (not isinstance(file_, dict)) and (not isinstance(file_, list)):
+            return file_
         file_header = file_[0].keys()
 
         mapping = self._validate_mapping(mapping, file_header)

@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class ProductLoader(BaseCsvLoader):
+class ProductLoader(BaseLoader):
     model_name = "product.template"
     folder = "product"
     filters = {}

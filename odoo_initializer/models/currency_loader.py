@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class CurrencyLoader(BaseCsvLoader):
+class CurrencyLoader(BaseLoader):
     model_name = "res.currency"
     folder = "currency"
     filters = {}

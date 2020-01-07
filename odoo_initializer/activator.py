@@ -20,12 +20,13 @@ from .models.system_parameter_loader import SystemParameterLoader
 from .models.default_value_loader import DefaultValueLoader
 from .models.currency_loader import CurrencyLoader
 from .models.orders_loader import OrdersLoader
+from .models.language_loader import LanguageLoader
 
 _logger = logging.getLogger(__name__)
 
 _logger.info("start initialization process")
 
-# laoders are ordered based on dependency to each others
+# loaders are ordered based on dependency to each others
 
 registered_loaders = [
     CurrencyLoader,
@@ -48,6 +49,7 @@ registered_loaders = [
     DefaultValueLoader,
     CompanyPropertyLoader,
     SystemParameterLoader,
+    LanguageLoader,
 ]
 
 for registered_loader in registered_loaders:

@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class ShopMappingLoader(BaseCsvLoader):
+class ShopMappingLoader(BaseLoader):
     model_name = "order.type.shop.mapping"
     folder = "shop_mapping"
     filters = {}

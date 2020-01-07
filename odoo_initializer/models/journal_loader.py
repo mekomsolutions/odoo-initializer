@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class JournalLoader(BaseCsvLoader):
+class JournalLoader(BaseLoader):
     model_name = "account.journal"
     folder = "journal"
     filters = {}

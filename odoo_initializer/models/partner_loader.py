@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class PartnerLoader(BaseCsvLoader):
+class PartnerLoader(BaseLoader):
     model_name = "res.partner"
     folder = "partner"
     filters = {}

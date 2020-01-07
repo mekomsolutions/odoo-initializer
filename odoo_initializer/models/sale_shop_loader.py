@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class SaleShopLoader(BaseCsvLoader):
+class SaleShopLoader(BaseLoader):
     model_name = "sale.shop"
     folder = "sale_shop"
     filters = {}

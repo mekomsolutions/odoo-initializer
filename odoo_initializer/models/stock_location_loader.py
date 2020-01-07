@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class StockLocationLoader(BaseCsvLoader):
+class StockLocationLoader(BaseLoader):
     model_name = "stock.location"
     folder = "stock_location"
     filters = {}

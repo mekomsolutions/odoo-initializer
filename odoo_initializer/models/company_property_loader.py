@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class CompanyPropertyLoader(BaseCsvLoader):
+class CompanyPropertyLoader(BaseLoader):
     update_existing_record = True
     model_name = "ir.property"
     folder = "company_property"

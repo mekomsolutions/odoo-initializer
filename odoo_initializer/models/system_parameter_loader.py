@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class SystemParameterLoader(BaseCsvLoader):
+class SystemParameterLoader(BaseLoader):
     model_name = "ir.config_parameter"
     folder = "system_parameter"
     filters = {}

@@ -1,7 +1,7 @@
-from .base_csv_loader import BaseCsvLoader
+from .base_loader import BaseLoader
 
 
-class DrugLoader(BaseCsvLoader):
+class DrugLoader(BaseLoader):
     model_name = "product.template"
     field_mapping = {
         "lst_price": "odoo_price",
