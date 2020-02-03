@@ -8,7 +8,7 @@ from .base_loader import BaseLoader, _logger
 
 class LanguageLoader(BaseLoader):
     folder = "language"
-    model_name = "res.lang"
+    model_name = "base.language.install"
     allowed_file_extensions = ".xml"
     filters = {}
 
@@ -25,5 +25,6 @@ class LanguageLoader(BaseLoader):
                 env = Environment(cr, uid, {})
                 model = env[self.model_name]
                 for lang in file_:
-                    model.load_lang(lang.text)
+                    installer = model.create({'lang': lang.text})
+                    installer.lang_install()
         return
