@@ -38,7 +38,7 @@ class BaseLoader:
                 cr.execute('SELECT model FROM ir_model ')
                 models = cr.dictfetchall()
 
-                # Checking if the model is available in database
+                # Check if the model is available in the database
                 found = False
                 for model in models:
                     if model['model'] == self.model_name:
@@ -48,9 +48,8 @@ class BaseLoader:
                     _logger.warn("model " + self.model_name + " not found.")
                     return False
 
-                # If model is available in database but not in the environment, Delete registry to provoke refreshing
-                # the list of models
-
+                # If model is available in the database but not in the environment, delete registry to trigger a refresh
+                # of the list of models
                 if found and (self.model_name not in odoo.api.Environment(cr, uid, {})):
                     registry.delete(config.db_name)
 
