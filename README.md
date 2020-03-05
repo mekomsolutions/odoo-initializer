@@ -39,6 +39,9 @@ See below the list of supported models:
 
 
 ----
+## Build, Test and Deploy
+Requires [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) to be installed.
+
 ### Run add-on tests
 
 Project tests should be run using the following Gradle command:
@@ -97,3 +100,8 @@ You can run those 2 tasks independently if you which.
 ./gradlew clean test run
 ```
 The Odoo server will be accessible at http://localhost:8069
+
+- If you want to force remove all the containers created in the tests, run the following:
+```
+./gradlew cleanDocker
+```
