@@ -1,4 +1,8 @@
 import logging
+import odoo
+from odoo import api
+
+from .utils import config
 
 from .models.country_loader import CountryLoader
 from .models.partner_loader import PartnerLoader
@@ -55,6 +59,8 @@ registered_loaders = [
 for registered_loader in registered_loaders:
     loader = registered_loader()
     loader.load_()
+
+    config.init = False
 
 
 _logger.info("initialization done")

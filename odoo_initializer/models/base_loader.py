@@ -2,7 +2,6 @@ import logging
 
 import odoo
 from odoo import api
-from odoo.api import Environment
 
 from ..utils.config import config
 from ..utils.data_files_utils import data_files
@@ -34,25 +33,14 @@ class BaseLoader:
             registry = odoo.registry(config.db_name)
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
-                # fetching the list of models available in database
-                cr.execute('SELECT model FROM ir_model ')
-                models = cr.dictfetchall()
 
-                # Checking if the model is available in database
-                found = False
-                for model in models:
-                    if model['model'] == self.model_name:
-                        found = True
-
-                if not found:
-                    _logger.warn("model " + self.model_name + " not found.")
-                    return False
-
-                # If model is available in database but not in the environment, Delete registry to provoke refreshing
-                # the list of models
-
-                if found and (self.model_name not in odoo.api.Environment(cr, uid, {})):
+                if not config.init:
                     registry.delete(config.db_name)
+                    config.init = True
+
+                if self.model_name not in odoo.api.Environment(cr, uid, {}):
+                    _logger.warn("model '" + self.model_name + "' not found.")
+                    return False
 
                 ctx = odoo.api.Environment(cr, uid, {})['res.users'].context_get()
                 env = odoo.api.Environment(cr, uid, ctx)

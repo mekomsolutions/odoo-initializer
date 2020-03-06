@@ -37,7 +37,7 @@ class TestDataFilesUtils(tests.BaseCase):
         # Verify
         assert checksum_path == "/custom/data_checksum/odoo/odoo.conf.checksum"
 
-    def test_get_files(self):
+    def test_get_files_should_get_files_by_extension(self):
         # Create config directories
 
         temp_dir = tempfile.mkdtemp()
@@ -54,8 +54,5 @@ class TestDataFilesUtils(tests.BaseCase):
 
         # Replay
         files = data_files.get_files(basename(data_dir), ".csv")
-        files_already_processed = data_files.get_files(basename(data_dir), ".csv")
-
         # Verify
         assert len(files) == 3
-        assert len(files_already_processed) == 0
