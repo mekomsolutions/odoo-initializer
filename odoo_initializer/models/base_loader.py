@@ -2,7 +2,6 @@ import logging
 
 import odoo
 from odoo import api
-from odoo.api import Environment
 
 from ..utils.config import config
 from ..utils.data_files_utils import data_files
@@ -28,16 +27,24 @@ class BaseLoader:
         )
 
     def load_file(self, file_):
-
         if not file_:
             return []
         with api.Environment.manage():
-            registry = odoo.modules.registry.RegistryManager.get(config.db_name)
-            if not self.test:
-                registry.delete_all()
+            registry = odoo.registry(config.db_name)
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
-                env = Environment(cr, uid, {})
+
+                if not config.init:
+                    registry.delete(config.db_name)
+                    config.init = True
+
+                if self.model_name not in odoo.api.Environment(cr, uid, {}):
+                    _logger.warn("model '" + self.model_name + "' not found.")
+                    return False
+
+                ctx = odoo.api.Environment(cr, uid, {})['res.users'].context_get()
+                env = odoo.api.Environment(cr, uid, ctx)
+
                 model = env["base_import.import"]
                 import_wizard = model.create(
                     {
@@ -49,8 +56,7 @@ class BaseLoader:
                 result = import_wizard.do(
                     self.fields, {"quoting": '"', "separator": ",", "headers": True}
                 )
-                _logger.info("import done")
-        return result
+        return True
 
     def _validate_mapping(self, mapping, file_header):
         validated_mapping = {}
@@ -105,22 +111,11 @@ class BaseLoader:
                 mapped_dict.append(mapped_row)
 
         return data_files.build_csv(mapped_dict) if mapped_dict else []
-
-    def _model_exist(self):
-        with api.Environment.manage():
-            registry = odoo.modules.registry.RegistryManager.get(config.db_name)
-            if not self.test:
-                registry.delete_all()
-            with registry.cursor() as cr:
-                uid = odoo.SUPERUSER_ID
-                env = Environment(cr, uid, {})
-                return self.model_name in env
                 
     def load_(self):
         _logger.info("file loading")
         for file_ in self.load_files(self.folder):
-            if self._model_exist():
-                mapped_file = self._mapper(file_, self.field_mapping, self.filters)
-                self.load_file(mapped_file)
-            else:
-                _logger.warn('the model"' + self.model_name + '" does not exist')
+            file_content = data_files.get_file_content(file_, self.allowed_file_extensions)
+            mapped_file = self._mapper(file_content, self.field_mapping, self.filters)
+            if self.load_file(mapped_file):
+                data_files.create_checksum_file(data_files.get_checksum_path(file_), data_files.md5(file_))

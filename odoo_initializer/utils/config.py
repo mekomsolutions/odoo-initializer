@@ -6,6 +6,7 @@ _logger = logging.getLogger(__name__)
 
 class Config:
     def __init__(self):
+        self.init = False
         try:
             data_files_paths_property = odoo.tools.config[
                 "initializer_data_files_paths"

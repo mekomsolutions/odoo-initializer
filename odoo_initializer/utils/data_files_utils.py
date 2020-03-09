@@ -51,16 +51,16 @@ class DataFilesUtils:
                                 "Skipping already processed file: " + str(file_)
                             )
                             continue
-                        _logger.info(
-                                "processing file: " + str(file_)
-                            )
-                        with open(os.path.join(path, file_), "r") as file_data:
-                            if ".csv" in allowed_extensions:
-                                import_files.append(self.get_csv_content(file_data))
-                            elif ".xml" in allowed_extensions:
-                                xml_content = self.get_xml_content(file_data)
-                                import_files.append(xml_content)
+                        import_files.append(file_path)
+
         return import_files
+
+    def get_file_content(self, file_path, allowed_extensions):
+        with open(file_path, "r") as file_data:
+            if ".csv" in allowed_extensions:
+                return self.get_csv_content(file_data)
+            elif ".xml" in allowed_extensions:
+                return self.get_xml_content(file_data)
 
     @staticmethod
     def get_checksum_path(file_):
@@ -79,19 +79,19 @@ class DataFilesUtils:
         if os.path.exists(checksum_path):
             with open(checksum_path, "r") as f:
                 old_md5 = f.read()
-                if old_md5 != md5:
-                    f.close()
-                    with open(checksum_path, "w") as fw:
-                        fw.write(md5)
-            return old_md5 == md5
+                f.close()
+                return old_md5 == md5
         if not os.path.isdir(dirname(checksum_path)):
             try:
                 os.makedirs(dirname(checksum_path))
             except OSError:
                 raise
-        with open(checksum_path, "w") as f:
-            f.write(md5)
         return False
+
+    @staticmethod
+    def create_checksum_file(checksum_path, md5):
+        with open(checksum_path, "w") as fw:
+            fw.write(md5)
 
     @staticmethod
     def md5(fname):
