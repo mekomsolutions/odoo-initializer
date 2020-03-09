@@ -1,6 +1,6 @@
 import os
 import tempfile
-from os.path import dirname, basename
+from os.path import basename
 
 from odoo.tests import logging
 from odoo import tests
@@ -56,3 +56,20 @@ class TestDataFilesUtils(tests.BaseCase):
         files = data_files.get_files(basename(data_dir), ".csv")
         # Verify
         assert len(files) == 3
+
+    def test_create_checksum_when_file_loaded(self):
+        # Create config directories
+        temp_dir = tempfile.mkdtemp()
+        config_checksum_dir = tempfile.mkdtemp(dir=temp_dir)
+        config.checksum_folder = config_checksum_dir
+
+        file__ = data_files.get_checksum_path(self._get_test_file())
+        checksum = data_files.md5(self._get_test_file())
+
+        # Replay
+        file_processed = data_files.file_already_processed(self._get_test_file())
+        data_files.create_checksum_file(file__, checksum)
+
+        # Verify
+        assert not file_processed
+        assert os.path.exists(os.path.join(config_checksum_dir, "odoo/odoo.conf.checksum"))
