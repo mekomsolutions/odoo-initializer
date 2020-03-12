@@ -4,7 +4,6 @@ services:
     image: odoo:10.0
     command: -d odoo --stop-after-init
     volumes:
-      - ${sources}:/mnt/extra-addons/odoo_initializer
       - ${testResources}/config:/etc/odoo
   db:
     image: postgres:10
