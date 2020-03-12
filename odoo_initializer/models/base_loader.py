@@ -33,8 +33,16 @@ class BaseLoader:
             registry = odoo.registry(config.db_name)
             with registry.cursor() as cr:
                 uid = odoo.SUPERUSER_ID
+                cr.execute('SELECT model FROM ir_model ')
+                models = cr.dictfetchall()
 
-                if not config.init:
+                # Checking if the model is available in database
+                found = False
+                for model in models:
+                    if model['model'] == self.model_name:
+                        found = True
+
+                if (not config.init) and found and (self.model_name not in odoo.api.Environment(cr, uid, {})):
                     registry.delete(config.db_name)
                     config.init = True
 
