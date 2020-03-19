@@ -40,7 +40,6 @@ class DataFilesUtils:
         import_files = []
         for data_files_source in config.data_files_paths:
             path = os.path.join(data_files_source, folder)
-            _logger.info("path:" + path)
             for root, dirs, files in os.walk(path):
                 for file_ in files:
                     file_path = os.path.join(path, file_)

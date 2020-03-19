@@ -36,6 +36,21 @@ See below the list of supported models:
 - [Default Value (CSV)](./readme/default_value.md)
 - [Language (XML)](./readme/language.md)
 
+### Optional model behavior paramters:
+
+Below is the list of supported optional parameters, that can change behavior when handling model files:
+
+#### field mapping:
+Map field name in Odoo model with column name in CSV file, see example [here](./odoo_initializer/models/orders_loader.py#L6)
+
+#### filters:
+Select only rows where value of selected column is matching specified options, see example [here](./odoo_initializer/models/orders_loader.py#L16)
+
+#### rules
+Apply a defined function on each row of a CSV file by taking a field name as a parameter, implemeneted rules are [here](./odoo_initializer/models/base_loader.py#L29)
+, see example [here](./odoo_initializer/models/product_loader.py#L8)
+
+Note: [here](./odoo_initializer/models/currency_loader.py#L4) is a default domain implementation example
 
 
 ----

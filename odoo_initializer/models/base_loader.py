@@ -1,4 +1,5 @@
 import logging
+from os.path import basename
 
 import odoo
 from odoo import api
@@ -20,6 +21,20 @@ class BaseLoader:
     field_mapping = None
     folder = None
     filters = {}
+    field_rules = {}
+
+    def apply_rules(self, record={}, rules={}):
+
+        # all rules should be registered here
+        _rules_register = {
+            "NO_UPDATE": self._no_update_rule
+        }
+
+        for rule_key, rule_value in rules.items():
+            if self._record_exist(record):
+                return _rules_register.get(rule_value)(record, rule_key)
+            else:
+                return record
 
     def load_files(self, relevant_folder):
         return data_files.get_files(
@@ -43,11 +58,12 @@ class BaseLoader:
                         found = True
 
                 if (not config.init) and found and (self.model_name not in odoo.api.Environment(cr, uid, {})):
+                    _logger.info("Updating registry once")
                     registry.delete(config.db_name)
                     config.init = True
 
                 if self.model_name not in odoo.api.Environment(cr, uid, {}):
-                    _logger.warn("model '" + self.model_name + "' not found.")
+                    _logger.warn("Model '" + self.model_name + "' not found.")
                     return False
 
                 ctx = odoo.api.Environment(cr, uid, {})['res.users'].context_get()
@@ -90,16 +106,20 @@ class BaseLoader:
         if (not isinstance(file_, dict)) and (not isinstance(file_, list)):
             return file_
         file_header = file_[0].keys()
-
         mapping = self._validate_mapping(mapping, file_header)
-        self.fields = mapping.keys()
-
         for dict_line in file_:
             to_map = False
 
-            if not filters_:
+            if (not filters_) and (not self.field_rules):
                 to_map = True
 
+            # Apply rule and mark it to be mapped if any is set
+            if self.field_rules:
+                record = self.apply_rules(dict_line, self.field_rules)
+                dict_line = record
+                to_map = True
+
+            # Do not map row if filters applies
             for filter_key, filter_value in filters_.items():
                 if filter_key in dict_line.keys():
                     filter_value = (
@@ -118,12 +138,35 @@ class BaseLoader:
                         mapped_row[key] = dict_line.pop(value)
                 mapped_dict.append(mapped_row)
 
+        self.fields = mapped_dict[0].keys()
         return data_files.build_csv(mapped_dict) if mapped_dict else []
-                
+
+    def _record_exist(self, record):
+        with api.Environment.manage():
+            registry = odoo.registry(config.db_name)
+            with registry.cursor() as cr:
+
+                cr.execute("SELECT name FROM ir_model_data WHERE name='" + record.get("id") + "';")
+                result = cr.dictfetchall() or False
+                return result
+
+    # This rule delete the field that shouldn't be updated if found, from the record
+    def _no_update_rule(self, record=None, field=None):
+        if record is None:
+            record = {}
+        updated_record = dict(record)
+        if field in record:
+            updated_record.pop(field)
+            return updated_record
+        return record
+
     def load_(self):
-        _logger.info("file loading")
+        _logger.info("Loading files for model: " + self.model_name)
         for file_ in self.load_files(self.folder):
             file_content = data_files.get_file_content(file_, self.allowed_file_extensions)
             mapped_file = self._mapper(file_content, self.field_mapping, self.filters)
             if self.load_file(mapped_file):
+                _logger.info("File loaded successfully: " + basename(file_))
                 data_files.create_checksum_file(data_files.get_checksum_path(file_), data_files.md5(file_))
+            else:
+                _logger.warn("File cannot be loaded: " + basename(file_))
