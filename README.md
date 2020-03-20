@@ -36,22 +36,57 @@ See below the list of supported models:
 - [Default Value (CSV)](./readme/default_value.md)
 - [Language (XML)](./readme/language.md)
 
-### Optional model behavior paramters:
+### Specific model behavior parameters:
 
 Below is the list of supported optional parameters, that can change behavior when handling model files:
 
 #### field mapping:
-Map field name in Odoo model with column name in CSV file, see example [here](./odoo_initializer/models/orders_loader.py#L6)
+Map field name in Odoo model with column name in CSV file, see example [here](./odoo_initializer/models/orders_loader.py#L6-L14)
+
+```
+field_mapping = {
+        "lst_price": "odoo_price",
+        "product_variant_ids/categ_id/id": "odoo_category",
+        "type": "odoo_type",
+        "name": "Short name:en",
+        "product_variant_ids/uuid": "Uuid",
+        "id": "odoo_id",
+        "description": "Data class",
+    }
+```
+Field mapping is a json object where keys are Odoo field name (ie: "lst_price") and values are CSV column names (ie: "odoo_price")
 
 #### filters:
 Select only rows where value of selected column is matching specified options, see example [here](./odoo_initializer/models/orders_loader.py#L16)
+```
+filters = {
+        "Data class": ["LabTest",
+                       "Radiology"]
+    }
+```
+From the example above, only rows where "Data Class" value is "LabTest" or "Radiology" will be loaded.
 
 #### rules
-Apply a defined function on each row of a CSV file by taking a field name as a parameter, implemeneted rules are [here](./odoo_initializer/models/base_loader.py#L29)
-, see example [here](./odoo_initializer/models/product_loader.py#L8)
+Apply a defined function on each row of a CSV file by taking a field name as a parameter, see example [here](./odoo_initializer/models/product_loader.py#L8-L10)
+
+available rules:
+- NO_UPDATE: do not update the specified field if the record exists.
+
+```
+field_rules = {
+        "lst_price": "NO_UPDATE"
+    }
+```
+For product loader, if record exist we update it without "lst_price".
 
 Note: [here](./odoo_initializer/models/currency_loader.py#L4) is a default domain implementation example
+```
+class CurrencyLoader(BaseLoader):
+    model_name = "res.currency"
+    folder = "currency"
+```
 
+a default loader is a class that inherits BaseLoader where, "folder" is the configuration subfolder where all files to be loader are placed, and "model_name" is the Odoo database model where all records in files should be saved. 
 
 ----
 ## Build, Test and Deploy
