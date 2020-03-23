@@ -54,17 +54,18 @@ field_mapping = {
         "description": "Data class",
     }
 ```
-Field mapping is a json object where keys are Odoo field name (ie: "lst_price") and values are CSV column names (ie: "odoo_price")
+Field mapping is a JSON object where keys are Odoo field names (eg: "lst_price") and values are CSV column names (eg: "odoo_price")
+In that case, it allows Odoo initializer to process Concept files from OpenMRS Initializer compatible files.
 
 #### filters:
-Select only rows where value of selected column is matching specified options, see example [here](./odoo_initializer/models/orders_loader.py#L16)
+Filter out rows where value of selected column does not match the specified options, see example [here](./odoo_initializer/models/orders_loader.py#L16)
 ```
 filters = {
         "Data class": ["LabTest",
                        "Radiology"]
     }
 ```
-From the example above, only rows where "Data Class" value is "LabTest" or "Radiology" will be loaded.
+From the example above, only rows where `Data Class` value is "LabTest" or "Radiology" will be loaded.
 
 #### rules
 Apply a defined function on each row of a CSV file by taking a field name as a parameter, see example [here](./odoo_initializer/models/product_loader.py#L8-L10)
@@ -77,7 +78,7 @@ field_rules = {
         "lst_price": "NO_UPDATE"
     }
 ```
-For product loader, if record exist we update it without "lst_price".
+If record exists we update it without "lst_price".
 
 Note: [here](./odoo_initializer/models/currency_loader.py#L4) is a default domain implementation example
 ```
@@ -86,7 +87,7 @@ class CurrencyLoader(BaseLoader):
     folder = "currency"
 ```
 
-a default loader is a class that inherits BaseLoader where, "folder" is the configuration subfolder where all files to be loader are placed, and "model_name" is the Odoo database model where all records in files should be saved. 
+A default loader is a class that inherits [BaseLoader]((./odoo_initializer/models/base_loader.py#) where `folder` is the configuration subfolder where all files to be loaded are placed, and `model_name` is the Odoo database model where all records in files should be saved. 
 
 ----
 ## Build, Test and Deploy

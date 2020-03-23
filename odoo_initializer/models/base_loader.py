@@ -150,7 +150,7 @@ class BaseLoader:
                 result = cr.dictfetchall() or False
                 return result
 
-    # This rule delete the field that shouldn't be updated if found, from the record
+    # Rule to delete a field that shouldn't be updated if found, from the record
     def _no_update_rule(self, record=None, field=None):
         if record is None:
             record = {}
