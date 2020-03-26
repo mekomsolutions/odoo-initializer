@@ -5,6 +5,7 @@ services:
     command: -d odoo --stop-after-init  -i sale,stock,account_accountant
     volumes:
       - odoo-filestore:/var/lib/odoo/filestore
+      - ${sources}:/mnt/extra-addons/odoo_initializer
   db:
     image: postgres:10
     environment:

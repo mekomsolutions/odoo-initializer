@@ -1,5 +1,6 @@
 import odoo
 from odoo import api
+from odoo.api import Environment
 from ..utils.config import config
 
 from .base_loader import BaseLoader
@@ -7,7 +8,7 @@ from .base_loader import BaseLoader
 
 class LanguageLoader(BaseLoader):
     folder = "language"
-    model_name = "res.lang"
+    model_name = "base.language.install"
     allowed_file_extensions = ".xml"
     filters = {}
 
@@ -17,12 +18,10 @@ class LanguageLoader(BaseLoader):
         with api.Environment.manage():
             registry = odoo.registry(config.db_name)
             with registry.cursor() as cr:
-
                 uid = odoo.SUPERUSER_ID
-                ctx = odoo.api.Environment(cr, uid, {})['res.users'].context_get()
-                env = odoo.api.Environment(cr, uid, ctx)
+                env = Environment(cr, uid, {})
                 model = env[self.model_name]
-
                 for lang in file_:
-                    model.load_lang(lang.text)
+                    installer = model.create({'lang': lang.text})
+                    installer.lang_install()
         return

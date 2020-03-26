@@ -72,6 +72,7 @@ Apply a defined function on each row of a CSV file by taking a field name as a p
 
 available rules:
 - NO_UPDATE: do not update the specified field if the record exists.
+- EXTERNAL_TO_INTERNAL_ID: substitute external id with internal id 
 
 ```
 field_rules = {
