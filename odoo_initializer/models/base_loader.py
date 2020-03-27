@@ -27,14 +27,14 @@ class BaseLoader:
 
         # all rules should be registered here
         _rules_register = {
-            "NO_UPDATE": self._no_update_rule
+            "NO_UPDATE": self._no_update_rule,
+            "EXTERNAL_TO_INTERNAL_ID": self._external_to_internal_id_rule,
         }
 
-        for rule_key, rule_value in rules.items():
-            if self._record_exist(record):
-                return _rules_register.get(rule_value)(record, rule_key)
-            else:
-                return record
+        for rule_field, rule_name in rules.items():
+            record = _rules_register.get(rule_name)(record, rule_field)
+
+        return record
 
     def load_files(self, relevant_folder):
         return data_files.get_files(
@@ -141,24 +141,39 @@ class BaseLoader:
         self.fields = mapped_dict[0].keys()
         return data_files.build_csv(mapped_dict) if mapped_dict else []
 
-    def _record_exist(self, record):
+    def _record_exist(self, record_id):
         with api.Environment.manage():
             registry = odoo.registry(config.db_name)
             with registry.cursor() as cr:
-
-                cr.execute("SELECT name FROM ir_model_data WHERE name='" + record.get("id") + "';")
-                result = cr.dictfetchall() or False
-                return result
+                cr.execute("SELECT res_id FROM ir_model_data WHERE name='" + record_id + "';")
+                return cr.dictfetchall() or False
 
     # Rule to delete a field that shouldn't be updated if found, from the record
     def _no_update_rule(self, record=None, field=None):
         if record is None:
             record = {}
         updated_record = dict(record)
+        if not self._record_exist(record.get("id")):
+            return record
         if field in record:
             updated_record.pop(field)
             return updated_record
         return record
+
+    # Rule to replace a record referenced by external id with its internal id
+    def _external_to_internal_id_rule(self, record=None, field=None):
+        if record is None:
+            record = {}
+        updated_record = dict(record)
+        field_origin_value = record.get(field)
+        external_id = data_files.extract_reference(field_origin_value)
+        if not external_id:
+            return updated_record
+        result = self._record_exist(external_id)
+        if result:
+            field_value = data_files.replace_reference(field_origin_value, str(result[0].get('res_id')))
+            updated_record[field] = field_value
+        return updated_record
 
     def load_(self):
         _logger.info("Loading files for model: " + self.model_name)

@@ -1,5 +1,5 @@
 import logging
-import os
+import os, re
 import hashlib
 import csv
 import tempfile
@@ -113,5 +113,14 @@ class DataFilesUtils:
         csv_string.replace("\r\n", "\n")
         return csv_string
 
+    @staticmethod
+    def extract_reference(text_value):
+        extract = re.search("\$\{(.+?)\}", text_value)
+        if extract:
+            return extract.group(1) or ""
+
+    @staticmethod
+    def replace_reference(text_, ref_value):
+        return re.sub("\$\{(.*?)\}", ref_value, text_)
 
 data_files = DataFilesUtils()

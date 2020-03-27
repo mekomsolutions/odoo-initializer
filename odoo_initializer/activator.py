@@ -1,6 +1,4 @@
 import logging
-import odoo
-from odoo import api
 
 from .utils import config
 
