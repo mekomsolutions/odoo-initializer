@@ -97,7 +97,7 @@ class BaseLoader:
                     break
         return validated_mapping
 
-    def _mapper(self, file_, mapping, filters_):
+    def _pre_process(self, file_, mapping, filters_):
         if not isinstance(filters_, dict):
             filters_ = {}
         mapped_dict = []
@@ -179,7 +179,7 @@ class BaseLoader:
         _logger.info("Loading files for model: " + self.model_name)
         for file_ in self.load_files(self.folder):
             file_content = data_files.get_file_content(file_, self.allowed_file_extensions)
-            mapped_file = self._mapper(file_content, self.field_mapping, self.filters)
+            mapped_file = self._pre_process(file_content, self.field_mapping, self.filters)
             if self.load_file(mapped_file):
                 _logger.info("File loaded successfully: " + basename(file_))
                 data_files.create_checksum_file(data_files.get_checksum_path(file_), data_files.md5(file_))

@@ -67,12 +67,12 @@ task initializeDb(type: Exec) {
 	'--abort-on-container-exit'
 }
 
-task runUnitTests(type: Exec) {
+task runTests(type: Exec) {
 	dependsOn initializeDb
 	workingDir testResourcesDir
 	commandLine 'docker-compose',
 	'-f',
-	'dockerfiles/run-unit-tests.yml',
+	'dockerfiles/run-tests.yml',
 	'up',
 	'--abort-on-container-exit'
 }
@@ -190,7 +190,7 @@ task createPom {
 }
 
 test {
-	dependsOn runUnitTests, processCSVs
+	dependsOn runTests, processCSVs
 }
 
 task cleanDocker {
