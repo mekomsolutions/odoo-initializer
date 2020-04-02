@@ -18,13 +18,6 @@ class TestLoader(tests.TransactionCase):
             {"id": "group_test_3", "name": "test_3", "comment": "other"},
         ]
 
-    @staticmethod
-    def _get_updated_groups():
-        return [
-            {"id": "group_test_1", "name": "test_1", "comment": "other"},
-            {"id": "group_test_3", "name": "test_3", "comment": "updated comment"},
-        ]
-
     def test_load_file_should_import_records(self):
         # Setup
         test_loader = BaseLoader()
@@ -90,7 +83,10 @@ class TestLoader(tests.TransactionCase):
         )
 
         # Replay
-        processed_file = test_loader._pre_process(self._get_updated_groups(), None, None)
+        processed_file = test_loader._pre_process([
+            {"id": "group_test_1", "name": "test_1", "comment": "other"},
+            {"id": "group_test_3", "name": "test_3", "comment": "updated comment"},
+        ], None, None)
 
         test_loader.load_file(
             processed_file
