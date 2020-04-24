@@ -107,6 +107,8 @@ class BaseLoader:
             return file_
         file_header = file_[0].keys()
         mapping = self._validate_mapping(mapping, file_header)
+        if not mapping:
+            return []
         for dict_line in file_:
             to_map = False
 
