@@ -23,6 +23,7 @@ from .models.default_value_loader import DefaultValueLoader
 from .models.currency_loader import CurrencyLoader
 from .models.orders_loader import OrdersLoader
 from .models.language_loader import LanguageLoader
+from .models.syncable_units_loader import SyncableUnitsLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -48,6 +49,7 @@ registered_loaders = [
     SaleShopLoader,
     OrderTypeLoader,
     ShopMappingLoader,
+    SyncableUnitsLoader,
     DefaultValueLoader,
     CompanyPropertyLoader,
     SystemParameterLoader,
