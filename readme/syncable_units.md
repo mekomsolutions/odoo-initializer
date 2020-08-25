@@ -4,7 +4,7 @@ The `syncable_units` subfolder allows to import syncable units provided as CSV f
 
 | id | name   
 | - | - | - |
-| init.syncable_unit_1 | UI 
+| init.syncable_unit_mg | mg 
 
 
 See the test resources for further examples:
