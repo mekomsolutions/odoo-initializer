@@ -73,7 +73,7 @@ Apply a defined function on each row of a CSV file by taking a field name as a p
 
 available rules:
 - NO_UPDATE: do not update the specified field if the record exists.
-- EXTERNAL_TO_INTERNAL_ID: substitute external id with internal id 
+- EXTERNAL_TO_INTERNAL_ID: substitute external id with internal id
 
 ```
 field_rules = {
@@ -89,7 +89,7 @@ class CurrencyLoader(BaseLoader):
     folder = "currency"
 ```
 
-A default loader is a class that inherits [BaseLoader]((./odoo_initializer/models/base_loader.py#) where `folder` is the configuration subfolder where all files to be loaded are placed, and `model_name` is the Odoo database model where all records in files should be saved. 
+A default loader is a class that inherits [BaseLoader]((./odoo_initializer/models/base_loader.py#) where `folder` is the configuration subfolder where all files to be loaded are placed, and `model_name` is the Odoo database model where all records in files should be saved.
 
 ----
 ## Build, Test and Deploy
@@ -158,3 +158,7 @@ The Odoo server will be accessible at http://localhost:8069
 ```
 ./gradlew cleanDocker
 ```
+
+- The addon will expect some properties to be provided in the odoo.conf file. Those are:
+-- `initializer_checksums_path`: where to save checksums of processed files (to avoid re-processing old files upon restart)
+-- `initializer_data_files_paths`: comma separated list of where to find the Odoo configuration files.
