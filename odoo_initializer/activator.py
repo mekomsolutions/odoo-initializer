@@ -24,6 +24,7 @@ from .models.currency_loader import CurrencyLoader
 from .models.orders_loader import OrdersLoader
 from .models.language_loader import LanguageLoader
 from .models.syncable_units_loader import SyncableUnitsLoader
+from .models.decimal_precision_loader import DecimalPrecisionLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -53,6 +54,7 @@ registered_loaders = [
     DefaultValueLoader,
     CompanyPropertyLoader,
     SystemParameterLoader,
+    DecimalPrecisionLoader,
     LanguageLoader,
 ]
 
