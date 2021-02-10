@@ -35,6 +35,7 @@ See below the list of supported models:
 - [Shop Mapping (CSV)](./readme/shop_mapping.md) (Bahmni specific)
 - [Syncable Units (CSV)](./readme/syncable_units.md) (Bahmni specific)
 - [Default Value (CSV)](./readme/default_value.md)
+- [Decimal Precision (CSV)](./readme/decimal_precision.md)
 - [Language (XML)](./readme/language.md)
 
 ### Specific model behavior parameters:
