@@ -38,6 +38,14 @@ See below the list of supported models:
 - [Decimal Precision (CSV)](./readme/decimal_precision.md)
 - [Language (XML)](./readme/language.md)
 
+
+#### Support additional models through configuration file:
+
+Adding support to more models is possible by providing a configuration file (see example [here](./odoo_initializer/tests/resources/config/inializer_config.json)) and set the file path in odoo.conf as following
+
+```
+initializer_config_file_path = /opt/odoo/initialzer_config.json
+```
 ### Specific model behavior parameters:
 
 Below is the list of supported optional parameters, that can change behavior when handling model files:

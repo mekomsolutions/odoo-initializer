@@ -23,6 +23,9 @@ class Config:
             self.checksum_folder = odoo.tools.config["initializer_checksums_path"]
         except KeyError:
             self.checksum_folder = None
-
+        try:
+            self.config_file_path = odoo.tools.config["initializer_config_file_path"]
+        except KeyError:
+            self.config_file_path = None
 
 config = Config()

@@ -1,6 +1,7 @@
 import logging
 
 from .utils import config
+from .utils.models_import import ModelsImport
 
 from .models.country_loader import CountryLoader
 from .models.partner_loader import PartnerLoader
@@ -23,7 +24,6 @@ from .models.default_value_loader import DefaultValueLoader
 from .models.currency_loader import CurrencyLoader
 from .models.orders_loader import OrdersLoader
 from .models.language_loader import LanguageLoader
-from .models.syncable_units_loader import SyncableUnitsLoader
 from .models.decimal_precision_loader import DecimalPrecisionLoader
 
 _logger = logging.getLogger(__name__)
@@ -50,7 +50,6 @@ registered_loaders = [
     SaleShopLoader,
     OrderTypeLoader,
     ShopMappingLoader,
-    SyncableUnitsLoader,
     DefaultValueLoader,
     CompanyPropertyLoader,
     SystemParameterLoader,
@@ -64,5 +63,13 @@ for registered_loader in registered_loaders:
 
     config.init = False
 
+
+_logger.info("load initz configuration file")
+
+configuration_loaders = ModelsImport().get_initz_config_file_models()
+
+for config_loader in configuration_loaders:
+    loader = config_loader
+    loader.load_()
 
 _logger.info("initialization done")
