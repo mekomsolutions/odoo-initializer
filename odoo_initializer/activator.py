@@ -64,11 +64,11 @@ for registered_loader in registered_loaders:
     config.init = False
 
 
-_logger.info("load initz configuration file")
+_logger.info("load Initializer configurable loaders file")
 
-configuration_loaders = ModelsImport().get_initz_config_file_models()
+configurable_loaders = ModelsImport().get_initz_config_file_models()
 
-for config_loader in configuration_loaders:
+for config_loader in configurable_loaders:
     loader = config_loader
     loader.load_()
 
