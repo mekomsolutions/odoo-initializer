@@ -66,7 +66,7 @@ for registered_loader in registered_loaders:
 
 _logger.info("load Initializer configurable loaders file")
 
-configurable_loaders = ModelsImport().get_initz_config_file_models()
+configurable_loaders = ModelsImport().get_iniz_config_file_models()
 
 for config_loader in configurable_loaders:
     loader = config_loader

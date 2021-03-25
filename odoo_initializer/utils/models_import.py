@@ -19,7 +19,7 @@ class ModelsImport:
                 raise KeyError("The field " + property + "is required")
         return value
 
-    def get_initz_config_file_models(self):
+    def get_iniz_config_file_models(self):
         if (not config.config_file_path):
             return ""
         with open(config.config_file_path) as json_file:
