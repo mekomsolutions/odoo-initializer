@@ -33,7 +33,6 @@ See below the list of supported models:
 - [Product Category (CSV)](./readme/product_category.md)
 - [Order Type (CSV)](./readme/order_type.md) (Bahmni specific)
 - [Shop Mapping (CSV)](./readme/shop_mapping.md) (Bahmni specific)
-- [Syncable Units (CSV)](./readme/syncable_units.md) (Bahmni specific)
 - [Default Value (CSV)](./readme/default_value.md)
 - [Decimal Precision (CSV)](./readme/decimal_precision.md)
 - [Language (XML)](./readme/language.md)
