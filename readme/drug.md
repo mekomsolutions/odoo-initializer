@@ -19,16 +19,18 @@ field_mapping = {
     "product_variant_ids/categ_id/id": "odoo_category",
     "type":"odoo_type",
     "id": "odoo_id",
+    "uom_id/id": "odoo_uom",
+    "standard_price": "odoo_cost"
 }
 ```
 
 See the example below:
 
-| Uuid | 	Name |	Concept Drug |	odoo_price | odoo_category | odoo_id | odoo_type |
-| - | - | - | - | - | - | - |
-| 1 | Paracetamol 500mg | paracetamol | 120 | product.product_category_all | paracetamol_500mg | Stockable Product |
-| 2 | Panadol | paracetamol | 200 | product.product_category_all | Panadol | Stockable Product |
-| 3 | Metacin 1g | paracetamol | 300 | product.product_category_all | Metacin_1g | Stockable Product |
+| Uuid | Name |	Concept Drug |	odoo_price | odoo_category | odoo_id | odoo_type | odoo_uom | odoo_cost
+| - | - | - | - | - | - | - | - | - |
+| 1 | Paracetamol 500mg | paracetamol | 120 | product.product_category_all | paracetamol_500mg | Stockable Product | product.product_uom_qt | 80 |
+| 2 | Panadol | paracetamol | 200 | product.product_category_all | Panadol | Stockable Product | product.product_uom_qt | 150 |
+| 3 | Metacin 1g | paracetamol | 300 | product.product_category_all | Metacin_1g | Stockable Product | product.product_uom_qt | 200 |
 
 `Note` :
 - All fields in the example are mandatory, if a field is missing the file import will be skipped
