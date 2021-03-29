@@ -10,6 +10,8 @@ class DrugLoader(BaseLoader):
         "name": "Name",
         "product_variant_ids/uuid": "Uuid",
         "id": "odoo_id",
+        "uom_id/id": "odoo_uom",
+        "standard_price": "odoo_cost"
     }
     folder = "drugs"
     filters = {}
