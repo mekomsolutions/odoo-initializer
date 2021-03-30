@@ -25,6 +25,7 @@ from .models.currency_loader import CurrencyLoader
 from .models.orders_loader import OrdersLoader
 from .models.language_loader import LanguageLoader
 from .models.decimal_precision_loader import DecimalPrecisionLoader
+from .models.uom_loader import UOMLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -41,6 +42,7 @@ registered_loaders = [
     AccountLoader,
     JournalLoader,
     PaymentTermLoader,
+    UOMLoader,
     StockLocationLoader,
     ProductCategoryLoader,
     DrugLoader,
