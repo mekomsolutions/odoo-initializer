@@ -28,6 +28,7 @@ See below the list of supported models:
 - [Stock (CSV)](./readme/stock_location.md)
 - [Company (CSV)](./readme/company.md)
 - [Partner (CSV)](./readme/partner.md)
+- [Units of Measure](./readme/uom.md)
 - [Shop (CSV)](./readme/sale_shop.md) (Bahmni specific)
 - [Product (CSV)](./readme/product.md)
 - [Product Category (CSV)](./readme/product_category.md)
