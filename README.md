@@ -149,10 +149,10 @@ By default the repo URL will be Mekom Nexus repository, but you can provide your
 ```
 
 ### Additional info
-- The `test` Gradle task will in fact run 2 substasks: **runUnitTests** and **processCSVs**.
+- The `test` Gradle task will in fact run 2 substasks: **runTests** and **processCSVs**.
 You can run those 2 tasks independently if you which.
 ```
-./gradlew clean runUnitTests
+./gradlew clean runTests
 ```
 ```
 ./gradlew clean processCSVs
