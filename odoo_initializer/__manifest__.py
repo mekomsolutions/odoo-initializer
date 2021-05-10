@@ -14,6 +14,7 @@
 
     'author': "Mekom Solutions",
     'website': "http://www.mekomsolutions.com",
+    'license': "OCL-1",
 
     'category': 'Technical Settings',
     'version': '1.1.0-SNAPSHOT',
