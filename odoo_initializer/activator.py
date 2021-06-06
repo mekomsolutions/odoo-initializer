@@ -17,6 +17,7 @@ from .models.sale_shop_loader import SaleShopLoader
 from .models.product_category_loader import ProductCategoryLoader
 from .models.drug_loader import DrugLoader
 from .models.product_loader import ProductLoader
+from .models.product_variant_loader import ProductVariantLoader
 from .models.order_type_loader import OrderTypeLoader
 from .models.shop_mapping_loader import ShopMappingLoader
 from .models.system_parameter_loader import SystemParameterLoader
@@ -47,6 +48,7 @@ registered_loaders = [
     ProductCategoryLoader,
     DrugLoader,
     OrdersLoader,
+    ProductVariantLoader,
     ProductLoader,
     PriceListLoader,
     SaleShopLoader,
