@@ -1,0 +1,18 @@
+{
+    "models" : [
+        {
+            "model_name": "syncable.units.mapping",
+            "folder": "synable_units_mapping",
+            "filters": {},
+            "field_rules": "",
+            "field_mapping": ""
+        },
+        {
+            "model_name": "account.tax",
+            "folder": "taxes",
+            "filters": {},
+            "field_rules": "",
+            "field_mapping": ""
+        }
+    ]
+}
