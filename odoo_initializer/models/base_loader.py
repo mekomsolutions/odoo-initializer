@@ -36,10 +36,9 @@ class BaseLoader:
 
         return record
 
-    def load_files(self, relevant_folder):
+    def load_files(self, relevant_folder, model_name):
         return data_files.get_files(
-            relevant_folder, allowed_extensions=self.allowed_file_extensions
-        )
+            relevant_folder, allowed_extensions=self.allowed_file_extensions, model_name=model_name)
 
     def load_file(self, file_):
         if not file_:
@@ -179,11 +178,13 @@ class BaseLoader:
 
     def load_(self):
         _logger.info("Loading files for model: " + self.model_name)
-        for file_ in self.load_files(self.folder):
+        for file_ in self.load_files(self.folder, self.model_name):
             file_content = data_files.get_file_content(file_, self.allowed_file_extensions)
             mapped_file = self._pre_process(file_content, self.field_mapping, self.filters)
             if self.load_file(mapped_file):
                 _logger.info("File loaded successfully: " + basename(file_))
-                data_files.create_checksum_file(data_files.get_checksum_path(file_), data_files.md5(file_))
+                data_files.create_checksum_file(
+                    data_files.get_checksum_path(file_, self.model_name), data_files.md5(file_)
+                )
             else:
                 _logger.warn("File cannot be loaded: " + basename(file_))

@@ -36,7 +36,7 @@ class DataFilesUtils:
             tree = ET.fromstring(file_content)
         return tree
 
-    def get_files(self, folder, allowed_extensions):
+    def get_files(self, folder, allowed_extensions, model_name):
         import_files = []
         for data_files_source in config.data_files_paths:
             path = os.path.join(data_files_source, folder)
@@ -45,7 +45,7 @@ class DataFilesUtils:
                     file_path = os.path.join(path, file_)
                     filename, ext = os.path.splitext(file_)
                     if str(ext).lower() in allowed_extensions:
-                        if self.file_already_processed(file_path):
+                        if self.file_already_processed(file_path, model_name):
                             _logger.info(
                                 "Skipping already processed file: " + str(file_)
                             )
@@ -62,18 +62,17 @@ class DataFilesUtils:
                 return self.get_xml_content(file_data)
 
     @staticmethod
-    def get_checksum_path(file_):
+    def get_checksum_path(file_, model_name):
         file_name = basename(file_)
         file_dir = split(dirname(file_))[1]
         checksum_dir = config.checksum_folder or (
             split(dirname(file_))[0] + "_checksum"
         )
-        checksum_path = os.path.join(checksum_dir, file_dir, file_name) + ".checksum"
-
+        checksum_path = os.path.join(checksum_dir, file_dir, (model_name + "_" + file_name)) + ".checksum"
         return checksum_path
 
-    def file_already_processed(self, file_):
-        checksum_path = self.get_checksum_path(file_)
+    def file_already_processed(self, file_, model_name):
+        checksum_path = self.get_checksum_path(file_, model_name)
         md5 = self.md5(file_)
         if os.path.exists(checksum_path):
             with open(checksum_path, "r") as f:

@@ -8,7 +8,7 @@ The drug loader will apply a specific mapping to translate the OpenMRS Initializ
 [drug_loader.py#L6-L11](https://github.com/mekomsolutions/odoo-initializer/blob/ce149ea01c58c1101ee43f20d5dbcbad26a332af/odoo_initializer/models/drug_loader.py#L6-L11)
 ```
 field_mapping = {
-    "product_variant_ids/id": "odoo_id",
+    "product_variant_ids/id": "odoo_variant_id",
     "id": "odoo_id"
 }
 ```

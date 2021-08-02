@@ -18,7 +18,7 @@ field_mapping = {
     "lst_price": "odoo_price",
     "categ_id/id": "odoo_category",
     "type":"odoo_type",
-    "id": "odoo_id",
+    "id": "odoo_variant_id",
     "uom_id/id": "odoo_uom",
     "standard_price": "odoo_cost"
 }
