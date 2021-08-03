@@ -16,7 +16,6 @@ from .models.fiscal_position_loader import FiscalPositionLoader
 from .models.sale_shop_loader import SaleShopLoader
 from .models.product_category_loader import ProductCategoryLoader
 from .models.drug_loader import DrugLoader
-from .models.drug_variant_loader import DrugVariantLoader
 from .models.product_loader import ProductLoader
 from .models.product_variant_loader import ProductVariantLoader
 from .models.order_type_loader import OrderTypeLoader
@@ -47,7 +46,6 @@ registered_loaders = [
     UOMLoader,
     StockLocationLoader,
     ProductCategoryLoader,
-    DrugVariantLoader,
     DrugLoader,
     OrdersLoader,
     ProductVariantLoader,
