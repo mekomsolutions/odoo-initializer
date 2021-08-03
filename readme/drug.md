@@ -1,14 +1,14 @@
 ### Model `drug`
 
-The `drug` subfolder allows you to import Odoo product variants provided as CSV files.
+The `drug` subfolder allows you to import Odoo **product variants** provided as CSV files.
 It is designed specifically load OpenMRS Initializer drug type of files, ie, of a format compatible with [OpenMRS Module Initializer](https://github.com/mekomsolutions/openmrs-module-initializer/) concepts files.
 See an example file: [OpenMRS Drugs.csv](https://github.com/mekomsolutions/openmrs-module-initializer/blob/master/readme/drugs.md)
 
-The drug variant loader has been designed to allow OpenMRS and Odoo to share a common set of metadata and avoid maintaining 2 files.
+The drug loader has been designed to allow OpenMRS and Odoo to share a common set of metadata and avoid maintaining multiple files.
 
-So the Odoo drug variant loader allows you to provide to import products (drugs) in Odoo and provide a base price directly on the OpenMRS file.
+Thus the Odoo drug loader allows you to provide product fields (such as cost, price, category...) directly on the OpenMRS file.
 
-The drug variant loader will apply a specific mapping to translate the OpenMRS Initializer file headers and into Odoo compatible headers such as:
+The drug loader will apply a specific mapping to translate the OpenMRS Initializer file headers and into Odoo compatible headers such as:
 
 [drug_loader.py#L6-L11](../odoo_initializer/models/drug_loader.py#L6-L18)
 ```
