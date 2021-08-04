@@ -109,15 +109,10 @@ class BaseLoader:
         if not mapping:
             return []
         for dict_line in file_:
+            mapped_row = {}
             to_map = False
 
-            if (not filters_) and (not self.field_rules):
-                to_map = True
-
-            # Apply rule and mark it to be mapped if any is set
-            if self.field_rules:
-                record = self.apply_rules(dict_line, self.field_rules)
-                dict_line = record
+            if (not filters_):
                 to_map = True
 
             # Do not map row if filters applies
@@ -133,10 +128,16 @@ class BaseLoader:
 
             # If the Line is not filtered out then we apply the mapping and add it
             if to_map:
-                mapped_row = {}
                 for key, value in mapping.items():
                     if value in dict_line.keys():
                         mapped_row[key] = dict_line.pop(value)
+                
+            # Apply rule and mark it to be mapped if any is set
+            if self.field_rules:
+                record = self.apply_rules(mapped_row, self.field_rules)
+                mapped_row = record
+            
+            if mapped_row:
                 mapped_dict.append(mapped_row)
 
         self.fields = mapped_dict[0].keys()
