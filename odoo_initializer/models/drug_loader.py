@@ -15,4 +15,7 @@ class DrugLoader(BaseLoader):
         "uom_po_id/id": "odoo_purchase_uom"
     }
     folder = "drugs"
-    filters = {}
+    field_rules = {
+        "lst_price": "NO_UPDATE",
+        "standard_price": "NO_UPDATE"
+    }
