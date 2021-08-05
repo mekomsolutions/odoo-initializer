@@ -26,8 +26,6 @@ class TestDataFilesUtils(tests.BaseCase):
         checksum_path = data_files.get_checksum_path(self._get_test_file(), model_name)
 
         # Verify
-        _logger.info("LAKSJDLASJDLKANSFLJANFLJANSLD_LLS_KA")
-        _logger.info(checksum_path)
         assert checksum_path == "/etc_checksum/odoo/res.partner_odoo.conf.checksum"
 
     def test_get_custom_checksum_path(self):
@@ -39,8 +37,6 @@ class TestDataFilesUtils(tests.BaseCase):
         checksum_path = data_files.get_checksum_path(self._get_test_file(), model_name)
 
         # Verify
-        _logger.info("LAKSJDLASJDLKANSFLJANFLJANSLDKA")
-        _logger.info(checksum_path)
         assert checksum_path == "/custom/data_checksum/odoo/res.partner_odoo.conf.checksum"
 
     def test_get_files_should_get_files_by_extension(self):
