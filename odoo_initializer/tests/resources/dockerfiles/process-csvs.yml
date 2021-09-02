@@ -1,8 +1,13 @@
 version: '3'
 services:
   odoo:
-    image: odoo:10.0
-    command: -d odoo -u base_import --stop-after-init
+    image: mekom/odoo
+    environment: 
+      HOST: db
+      DB_NAME: odoo
+      INSTALL_ADDONS: sale_management,stock,account_account
+    ports:
+      - "8069:8069"
     volumes:
       - odoo-filestore:/var/lib/odoo/filestore
       - ${sources}:/mnt/extra-addons/odoo_initializer

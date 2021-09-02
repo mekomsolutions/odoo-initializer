@@ -1,6 +1,7 @@
 from odoo.tests import logging
 from odoo import tests
 
+from ..utils.registry import registry
 from ..models import BaseLoader
 
 _logger = logging.getLogger(__name__)
@@ -8,6 +9,10 @@ _logger = logging.getLogger(__name__)
 
 class TestLoader(tests.BaseCase):
     _test_model = "res.groups"
+
+    def setUp(self):
+        registry.initialize()
+
 
     @staticmethod
     def _get_groups():
@@ -34,6 +39,7 @@ class TestLoader(tests.BaseCase):
 
         # Verify
         assert validated_mapping == {}
+        registry.clear()
 
     def test_validate_mapping_should_return_same_if_valid(self):
 
@@ -56,6 +62,7 @@ class TestLoader(tests.BaseCase):
             "product_variant_ids/categ_id/id": "odoo_category",
             "type": "odoo_type",
         }
+        registry.clear()
 
     def test_filter_applied(self):
 
@@ -71,3 +78,4 @@ class TestLoader(tests.BaseCase):
 
         # Verify
         assert "other" not in filtered_groups
+        registry.clear()

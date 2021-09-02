@@ -1,2 +1,2 @@
 "id","key","value"
-"init.base_url","web.base.url","http://localhost:8069"
+"init.openmrs_url","web.openmrs.url","http://openmrs:8080"

@@ -1,2 +1,2 @@
 id,digits,name
-init.product_precision,2,Product Price
+product.decimal_price,2,Product Price

@@ -16,11 +16,12 @@
     'website': "http://www.mekomsolutions.com",
 
     'category': 'Technical Settings',
-    'version': '1.2.0-SNAPSHOT',
+    'version': '1.1.0-SNAPSHOT',
 
     "depends": ["base", "base_import"],
 
     "application": True,
     "installable": True,
-    "auto_install": True
+    "auto_install": True,
+    "post_startup_hook": 'start_init'
 }

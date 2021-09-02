@@ -3,12 +3,16 @@ from odoo.tests import logging
 
 from ..models import BaseLoader
 from .test_utils import TestUtils
+from ..utils.registry import registry
 
 _logger = logging.getLogger(__name__)
 
 
 class TestLoader(tests.TransactionCase):
     _test_model = "res.groups"
+
+    def setUp(self):
+        registry.initialize()
 
     @staticmethod
     def _get_non_updated_groups():
@@ -22,6 +26,7 @@ class TestLoader(tests.TransactionCase):
         # Setup
         test_loader = BaseLoader()
         test_loader.model_name = self._test_model
+        test_loader.test = True
         test_loader.fields = ["id", "name", "comment"]
 
         # Replay
@@ -39,6 +44,8 @@ class TestLoader(tests.TransactionCase):
         record = TestUtils().get_record("test_group", self._test_model)
         assert record.get("name") == "testing group"
         assert record.get("comment") == "a group for tests"
+
+        registry.clear()
 
     def test_load_file_should_update_records(self):
         # Setup
@@ -70,6 +77,8 @@ class TestLoader(tests.TransactionCase):
         record = TestUtils().get_record("test_group", self._test_model)
         assert record.get("comment") == "updated comment"
 
+        registry.clear()
+
     def test_no_update_rule_should_not_update_comment(self):
         # Setup
         test_loader = BaseLoader()
@@ -91,6 +100,8 @@ class TestLoader(tests.TransactionCase):
         test_loader.load_file(
             processed_file
         )
+
+        registry.clear()
 
         # Verify
         assert TestUtils().get_record("group_test_3", self._test_model).get("comment") == "other"
@@ -125,4 +136,6 @@ class TestLoader(tests.TransactionCase):
         internal_id = processed_file.split("refer to group:", 1)[1].split(",")[0].rstrip()
         assert internal_id.isdigit()
         assert int(internal_id) == test_loader._record_exist("group_test_1")[0].get('res_id')
+
+        registry.clear()
 

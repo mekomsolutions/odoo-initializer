@@ -16,22 +16,22 @@ class ModelsImport:
         try:
             value = model[property]
         except KeyError:
-            if (required):
+            if required:
                 raise KeyError("The field " + property + "is required")
         return value
 
     def get_iniz_config_file_models(self):
-        if (not config.config_file_path):
+        if not config.config_file_path:
             return ""
-        if (not os.path.exists(config.config_file_path)):
-            _logger.warn("Configuration file is specified but does not exists")
+        if not os.path.exists(config.config_file_path):
+            _logger.warning("Configuration file is specified but does not exists")
             return ""
         with open(config.config_file_path) as json_file:
             data = ""
             try:
                 data = json.load(json_file)
             except ValueError:
-                _logger.warn("Configuration file is not a json file, skipping")
+                _logger.warning("Configuration file is not a json file, skipping")
                 return ""
 
             config_loaders = []
@@ -48,4 +48,4 @@ class ModelsImport:
                 return config_loaders
             
             except KeyError:
-                _logger.warn("Configuration file does not have models section")
+                _logger.warning("Configuration file does not have models section")

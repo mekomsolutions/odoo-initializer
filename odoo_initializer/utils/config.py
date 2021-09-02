@@ -13,7 +13,7 @@ class Config:
             ]
             self.data_files_paths = data_files_paths_property.split(",")
         except KeyError:
-            _logger.warn("'initializer_data_files_paths' property is not set")
+            _logger.warning("'initializer_data_files_paths' property is not set")
             self.data_files_paths = []
         try:
             self.db_name = odoo.tools.config["db_name"]
@@ -27,5 +27,6 @@ class Config:
             self.config_file_path = odoo.tools.config["initializer_config_file_path"]
         except KeyError:
             self.config_file_path = None
+
 
 config = Config()

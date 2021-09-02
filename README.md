@@ -150,13 +150,9 @@ By default the repo URL will be Mekom Nexus repository, but you can provide your
 ```
 
 ### Additional info
-- The `test` Gradle task will in fact run 2 substasks: **runTests** and **processCSVs**.
-You can run those 2 tasks independently if you which.
+- To run Odoo and process the CSV files:
 ```
-./gradlew clean runTests
-```
-```
-./gradlew clean processCSVs
+./gradlew clean run
 ```
 
 - If you are willing to leave the Odoo server running after running the tests, use:

@@ -102,8 +102,7 @@ class DataFilesUtils:
 
     @staticmethod
     def build_csv(data):
-        tmp_file = tempfile.TemporaryFile()
-
+        tmp_file = tempfile.TemporaryFile(mode="w+")
         output = csv.DictWriter(tmp_file, fieldnames=data[0].keys())
         output.writeheader()
         output.writerows(data)

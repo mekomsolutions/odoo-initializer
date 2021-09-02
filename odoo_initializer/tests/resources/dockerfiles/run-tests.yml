@@ -1,9 +1,12 @@
 version: '3'
 services:
   odoo:
-    image: odoo:10.0
-    command: -d odoo --stop-after-init --test-enable -u odoo_initializer
+    image: mekom/odoo
+    command: --stop-after-init --test-enable
+    environment: 
+      DB_NAME: odoo
     volumes:
+      - odoo-filestore:/var/lib/odoo/filestore
       - ${sources}:/mnt/extra-addons/odoo_initializer
       - ${testResources}/config:/etc/odoo
   db:
@@ -12,3 +15,5 @@ services:
       POSTGRES_USER: odoo
       POSTGRES_PASSWORD: odoo
       POSTGRES_DB: postgres
+volumes:
+   odoo-filestore:

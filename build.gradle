@@ -46,29 +46,8 @@ task removeOdooWithCompose(type: Exec) {
 	'-v'
 }
 
-task runDbDetached(type: Exec) {
-	dependsOn copyTestResources
-	workingDir testResourcesDir
-	commandLine 'docker-compose',
-	'-f',
-	'dockerfiles/run-db.yml',
-	'up',
-	'-d'
-}
-
-task initializeDb(type: Exec) {
-	dependsOn copyTestResources,
-	runDbDetached
-	workingDir testResourcesDir
-	commandLine 'docker-compose',
-	'-f',
-	'dockerfiles/initialize-db.yml',
-	'up',
-	'--abort-on-container-exit'
-}
-
 task runTests(type: Exec) {
-	dependsOn initializeDb
+	dependsOn copyTestResources
 	workingDir testResourcesDir
 	commandLine 'docker-compose',
 	'-f',
@@ -77,43 +56,12 @@ task runTests(type: Exec) {
 	'--abort-on-container-exit'
 }
 
-task setVolumePermissions(type: Exec) {
-	dependsOn runDbDetached
-	workingDir testResourcesDir
-	commandLine 'docker-compose',
-	'-f',
-	'dockerfiles/set-volume-permissions.yml',
-	'up',
-	'--abort-on-container-exit'
-}
-
-task installBaseAddons(type: Exec) {
-	dependsOn setVolumePermissions
-	workingDir testResourcesDir
-	commandLine 'docker-compose',
-	'-f',
-	'dockerfiles/install-base-addons.yml',
-	'up',
-	'--abort-on-container-exit'
-}
-
-task processCSVs(type: Exec) {
-	dependsOn copyTestResources,
-	installBaseAddons
+task runOdoo(type: Exec) {
+	dependsOn copyTestResources
 	workingDir testResourcesDir
 	commandLine 'docker-compose',
 	'-f',
 	'dockerfiles/process-csvs.yml',
-	'up',
-	'--abort-on-container-exit'
-}
-
-task runOdoo(type: Exec) {
-	dependsOn installBaseAddons
-	workingDir testResourcesDir
-	commandLine 'docker-compose',
-	'-f',
-	'dockerfiles/run-with-csvs.yml',
 	'up',
 	'--abort-on-container-exit'
 }
@@ -190,7 +138,7 @@ task createPom {
 }
 
 test {
-	dependsOn runTests, processCSVs
+	dependsOn runTests
 }
 
 task cleanDocker {
