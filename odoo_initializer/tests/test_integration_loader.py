@@ -12,7 +12,8 @@ class TestLoader(tests.TransactionCase):
     _test_model = "res.groups"
 
     def setUp(self):
-        registry.initialize()
+        super(TestLoader, self).setUp()
+        registry.initialize(self.cursor())
 
     @staticmethod
     def _get_non_updated_groups():

@@ -7,12 +7,12 @@ from ..models import BaseLoader
 _logger = logging.getLogger(__name__)
 
 
-class TestLoader(tests.BaseCase):
+class TestLoader(tests.TransactionCase):
     _test_model = "res.groups"
 
     def setUp(self):
-        registry.initialize()
-
+        super(TestLoader, self).setUp()
+        registry.initialize(self.cursor())
 
     @staticmethod
     def _get_groups():
@@ -23,7 +23,6 @@ class TestLoader(tests.BaseCase):
         ]
 
     def test_validate_mapping_should_return_empty_if_not_valid(self):
-
         # Setup
         test_loader = BaseLoader()
         test_loader.model_name = self._test_model
@@ -42,7 +41,6 @@ class TestLoader(tests.BaseCase):
         registry.clear()
 
     def test_validate_mapping_should_return_same_if_valid(self):
-
         # Setup
         test_loader = BaseLoader()
         test_loader.model_name = self._test_model
@@ -65,7 +63,6 @@ class TestLoader(tests.BaseCase):
         registry.clear()
 
     def test_filter_applied(self):
-
         # Setup
         test_loader = BaseLoader()
         test_loader.model_name = self._test_model

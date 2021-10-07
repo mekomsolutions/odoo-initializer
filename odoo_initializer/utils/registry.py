@@ -20,14 +20,12 @@ class Registry(object):
             cls.instance = super(Registry, cls).__new__(cls)
         return cls.instance
 
-    def initialize(self):
+    def initialize(self, cr):
         if self.reg is None:
-            with api.Environment.manage():
-                self.reg = odoo.registry(config.db_name)
-                cr = self.reg.cursor()
-                uid = odoo.SUPERUSER_ID
-                self.env = odoo.api.Environment(cr, uid, {})
-                self.cursor = cr
+            uid = odoo.SUPERUSER_ID
+            self.env = odoo.api.Environment(cr, uid, {})
+            self.reg = self.env.registry
+            self.cursor = cr
 
     def clear(self):
         if not self.cursor.closed:

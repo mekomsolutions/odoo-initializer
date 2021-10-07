@@ -64,7 +64,7 @@ def start_init(cr):
         LanguageLoader,
     ]
 
-    registry.initialize()
+    registry.initialize(cr)
     for registered_loader in registered_loaders:
         loader = registered_loader()
         loader.load_()
