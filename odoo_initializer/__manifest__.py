@@ -16,7 +16,7 @@
     'website': "http://www.mekomsolutions.com",
 
     'category': 'Technical Settings',
-    'version': '1.2.0',
+    'version': '1.3.0-SNAPSHOT',
 
     "depends": ["base", "base_import"],
 
