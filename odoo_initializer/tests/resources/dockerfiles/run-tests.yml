@@ -1,14 +1,21 @@
 version: '3'
 services:
   odoo:
-    image: mekom/odoo
+    image: mekomsolutions/odoo:latest
     command: --stop-after-init --test-enable
     environment: 
+      HOST: db
       DB_NAME: odoo
+      INSTALL_ADDONS: sale_management,stock,account_account
+    ports:
+      - "8069:8069"
     volumes:
       - odoo-filestore:/var/lib/odoo/filestore
       - ${sources}:/mnt/extra-addons/odoo_initializer
       - ${testResources}/config:/etc/odoo
+      - ${testResources}/odoo_csv:/mnt/odoo_config
+      - ${testResources}/openmrs_csv:/mnt/openmrs_config
+      - odoo-checksums:/mnt/checksums
   db:
     image: postgres:10
     environment:
@@ -17,3 +24,4 @@ services:
       POSTGRES_DB: postgres
 volumes:
    odoo-filestore:
+   odoo-checksums:

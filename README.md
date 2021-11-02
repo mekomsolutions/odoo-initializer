@@ -150,15 +150,21 @@ By default the repo URL will be Mekom Nexus repository, but you can provide your
 ```
 
 ### Additional info
-- To run Odoo and process the CSV files:
+- To run Odoo tests and process the CSV files:
+```
+./gradlew clean test
+```
+
+- To process CSV files and keep Odoo server running:
 ```
 ./gradlew clean run
 ```
 
-- If you are willing to leave the Odoo server running after running the tests, use:
+Note: You can always run both tasks by using 
 ```
 ./gradlew clean test run
 ```
+
 The Odoo server will be accessible at http://localhost:8069
 
 - If you want to force remove all the containers created in the tests, run the following:
