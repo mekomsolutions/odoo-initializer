@@ -6,6 +6,5 @@ class ProductVariantLoader(BaseLoader):
     folder = "product_variant"
     filters = {}
     field_rules = {
-        "lst_price": "NO_UPDATE",
-        "standard_price": "NO_UPDATE"
+        "lst_price": "NO_UPDATE"
     }

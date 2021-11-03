@@ -1,11 +1,10 @@
 import logging
 from os.path import basename
 
-import odoo
-from odoo import api
-
-from ..utils.config import config
+from ..utils.registry import registry
 from ..utils.data_files_utils import data_files
+from ..utils.config import config
+from odoo import modules as modules
 
 _logger = logging.getLogger(__name__)
 
@@ -23,7 +22,12 @@ class BaseLoader:
     filters = {}
     field_rules = {}
 
-    def apply_rules(self, record={}, rules={}):
+    def apply_rules(self, record=None, rules=None):
+
+        if rules is None:
+            rules = {}
+        if record is None:
+            record = {}
 
         # all rules should be registered here
         _rules_register = {
@@ -43,42 +47,24 @@ class BaseLoader:
     def load_file(self, file_):
         if not file_:
             return []
-        with api.Environment.manage():
-            registry = odoo.registry(config.db_name)
-            with registry.cursor() as cr:
-                uid = odoo.SUPERUSER_ID
-                cr.execute('SELECT model FROM ir_model ')
-                models = cr.dictfetchall()
 
-                # Checking if the model is available in database
-                found = False
-                for model in models:
-                    if model['model'] == self.model_name:
-                        found = True
+        env = registry.env
+        if self.model_name not in env:
+            _logger.warning("Model '" + self.model_name + "' not found.")
+            return False
 
-                if (not config.init) and found and (self.model_name not in odoo.api.Environment(cr, uid, {})):
-                    _logger.info("Updating registry once")
-                    registry.delete(config.db_name)
-                    config.init = True
+        model = env["base_import.import"]
+        import_wizard = model.create(
+            {
+                "res_model": self.model_name,
+                "file": file_,
+                "file_type": "text/csv",
+            }
+        )
+        result = import_wizard.do(
+            self.fields, [], {"quoting": '"', "separator": ",", "headers": True}
+        )
 
-                if self.model_name not in odoo.api.Environment(cr, uid, {}):
-                    _logger.warn("Model '" + self.model_name + "' not found.")
-                    return False
-
-                ctx = odoo.api.Environment(cr, uid, {})['res.users'].context_get()
-                env = odoo.api.Environment(cr, uid, ctx)
-
-                model = env["base_import.import"]
-                import_wizard = model.create(
-                    {
-                        "res_model": self.model_name,
-                        "file": file_,
-                        "file_type": "text/csv",
-                    }
-                )
-                result = import_wizard.do(
-                    self.fields, {"quoting": '"', "separator": ",", "headers": True}
-                )
         return True
 
     def _validate_mapping(self, mapping, file_header):
@@ -92,7 +78,7 @@ class BaseLoader:
                     validated_mapping[field[0]] = field[1]
                 else:
                     validated_mapping = {}
-                    _logger.warn("Skipping file import, Field '" + field[1] + "' is missing")
+                    _logger.warning("Skipping file import, Field '" + field[1] + "' is missing")
                     break
         return validated_mapping
 
@@ -144,11 +130,9 @@ class BaseLoader:
         return data_files.build_csv(mapped_dict) if mapped_dict else []
 
     def _record_exist(self, record_id):
-        with api.Environment.manage():
-            registry = odoo.registry(config.db_name)
-            with registry.cursor() as cr:
-                cr.execute("SELECT res_id FROM ir_model_data WHERE name='" + record_id + "';")
-                return cr.dictfetchall() or False
+        cr = registry.cursor
+        cr.execute("SELECT res_id FROM ir_model_data WHERE name='" + record_id + "';")
+        return cr.dictfetchall() or False
 
     # Rule to delete a field that shouldn't be updated if found, from the record
     def _no_update_rule(self, record=None, field=None):
@@ -188,4 +172,4 @@ class BaseLoader:
                     data_files.get_checksum_path(file_, self.model_name), data_files.md5(file_)
                 )
             else:
-                _logger.warn("File cannot be loaded: " + basename(file_))
+                _logger.warning("File cannot be loaded: " + basename(file_))
