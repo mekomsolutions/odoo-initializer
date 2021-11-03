@@ -1,6 +1,7 @@
 import logging
 
 from .utils import config
+from .utils.registry import registry
 from .utils.models_import import ModelsImport
 
 from .models.country_loader import CountryLoader
@@ -30,50 +31,53 @@ from .models.uom_loader import UOMLoader
 
 _logger = logging.getLogger(__name__)
 
-_logger.info("start initialization process")
 
-# loaders are ordered based on dependency to each others
+def start_init(cr):
+    _logger.info("start initialization process")
 
-registered_loaders = [
-    CurrencyLoader,
-    CountryLoader,
-    FiscalPositionLoader,
-    PartnerLoader,
-    CompanyLoader,
-    AccountLoader,
-    JournalLoader,
-    PaymentTermLoader,
-    UOMLoader,
-    StockLocationLoader,
-    ProductCategoryLoader,
-    DrugLoader,
-    OrdersLoader,
-    ProductVariantLoader,
-    ProductLoader,
-    PriceListLoader,
-    SaleShopLoader,
-    OrderTypeLoader,
-    ShopMappingLoader,
-    DefaultValueLoader,
-    CompanyPropertyLoader,
-    SystemParameterLoader,
-    DecimalPrecisionLoader,
-    LanguageLoader,
-]
+    # loaders are ordered based on dependency to each others
 
-for registered_loader in registered_loaders:
-    loader = registered_loader()
-    loader.load_()
+    registered_loaders = [
+        CurrencyLoader,
+        CountryLoader,
+        FiscalPositionLoader,
+        PartnerLoader,
+        CompanyLoader,
+        AccountLoader,
+        JournalLoader,
+        PaymentTermLoader,
+        UOMLoader,
+        StockLocationLoader,
+        ProductCategoryLoader,
+        DrugLoader,
+        OrdersLoader,
+        ProductVariantLoader,
+        ProductLoader,
+        PriceListLoader,
+        SaleShopLoader,
+        OrderTypeLoader,
+        ShopMappingLoader,
+        DefaultValueLoader,
+        CompanyPropertyLoader,
+        SystemParameterLoader,
+        DecimalPrecisionLoader,
+        LanguageLoader,
+    ]
 
-    config.init = False
+    registry.initialize(cr)
+    for registered_loader in registered_loaders:
+        loader = registered_loader()
+        loader.load_()
 
+        config.init = False
 
-_logger.info("load Initializer configurable loaders file")
+    _logger.info("load Initializer configurable loaders file")
 
-configurable_loaders = ModelsImport().get_iniz_config_file_models()
+    configurable_loaders = ModelsImport().get_iniz_config_file_models()
 
-for config_loader in configurable_loaders:
-    loader = config_loader
-    loader.load_()
+    for config_loader in configurable_loaders:
+        loader = config_loader
+        loader.load_()
 
-_logger.info("initialization done")
+    registry.clear()
+    _logger.info("initialization done")
