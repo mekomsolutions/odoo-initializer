@@ -6,5 +6,5 @@ _logger = logging.getLogger(__name__)
 
 
 class UOMLoader(BaseLoader):
-    model_name = "product.uom"
+    model_name = "uom.uom"
     folder = "units_of_measure"
