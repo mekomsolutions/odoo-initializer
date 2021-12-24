@@ -20,4 +20,4 @@ class LanguageLoader(BaseLoader):
         model = env[self.model_name]
         for lang in file_:
             model.create({'lang': lang.text}).lang_install()
-        return
+        return True
