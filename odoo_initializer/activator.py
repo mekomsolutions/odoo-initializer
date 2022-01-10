@@ -28,6 +28,7 @@ from .models.orders_loader import OrdersLoader
 from .models.language_loader import LanguageLoader
 from .models.decimal_precision_loader import DecimalPrecisionLoader
 from .models.uom_loader import UOMLoader
+from .models.setting_loader import SettingLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -38,6 +39,7 @@ def start_init(cr):
     # loaders are ordered based on dependency to each others
 
     registered_loaders = [
+        SettingLoader,
         CurrencyLoader,
         CountryLoader,
         FiscalPositionLoader,

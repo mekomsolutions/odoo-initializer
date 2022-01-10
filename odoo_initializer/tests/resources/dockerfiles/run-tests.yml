@@ -4,9 +4,10 @@ services:
     image: mekomsolutions/odoo:latest
     command: --stop-after-init --test-enable
     environment: 
-      HOST: db
-      DB_NAME: odoo
-      INSTALL_ADDONS: sale_management,stock,account_account
+      - HOST=db
+      - DB_NAME=odoo
+      - ADDONS=sale_management,stock,account_account
+      - INITIALIZER_DATA_FILES_PATH=/mnt/odoo_config
     ports:
       - "8069:8069"
     volumes:

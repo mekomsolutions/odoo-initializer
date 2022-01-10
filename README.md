@@ -16,6 +16,7 @@ They are processed when the add-on is installed.
 ### Supported models:
 
 See below the list of supported models:
+- [Setting (XML)](./readme/setting.md)
 - [Currency (CSV)](./readme/currency.md)
 - [Country (CSV)](./readme/country.md)
 - [System Parameter (CSV)](./readme/system_parameter.md)
