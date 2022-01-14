@@ -14,13 +14,10 @@ from .models.price_list_loader import PriceListLoader
 from .models.account_loader import AccountLoader
 from .models.journal_loader import JournalLoader
 from .models.fiscal_position_loader import FiscalPositionLoader
-from .models.sale_shop_loader import SaleShopLoader
 from .models.product_category_loader import ProductCategoryLoader
 from .models.drug_loader import DrugLoader
 from .models.product_loader import ProductLoader
 from .models.product_variant_loader import ProductVariantLoader
-from .models.order_type_loader import OrderTypeLoader
-from .models.shop_mapping_loader import ShopMappingLoader
 from .models.system_parameter_loader import SystemParameterLoader
 from .models.default_value_loader import DefaultValueLoader
 from .models.currency_loader import CurrencyLoader
@@ -29,6 +26,9 @@ from .models.language_loader import LanguageLoader
 from .models.decimal_precision_loader import DecimalPrecisionLoader
 from .models.uom_loader import UOMLoader
 from .models.setting_loader import SettingLoader
+from .models.tax_loader import TaxLoader
+from .models.warehouse_loader import WarehouseLoader
+from .models.bom_loader import BomLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -56,13 +56,13 @@ def start_init(cr):
         ProductVariantLoader,
         ProductLoader,
         PriceListLoader,
-        SaleShopLoader,
-        OrderTypeLoader,
-        ShopMappingLoader,
         DefaultValueLoader,
         CompanyPropertyLoader,
         SystemParameterLoader,
         DecimalPrecisionLoader,
+        TaxLoader,
+        WarehouseLoader,
+        BomLoader,
         LanguageLoader,
     ]
 
