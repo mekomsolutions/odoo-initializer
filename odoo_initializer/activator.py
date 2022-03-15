@@ -29,6 +29,7 @@ from .models.setting_loader import SettingLoader
 from .models.tax_loader import TaxLoader
 from .models.warehouse_loader import WarehouseLoader
 from .models.bom_loader import BomLoader
+from .models.cash_rounding import CashRoundingLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -63,6 +64,7 @@ def start_init(cr):
         TaxLoader,
         WarehouseLoader,
         BomLoader,
+        CashRoundingLoader,
         LanguageLoader,
     ]
 
