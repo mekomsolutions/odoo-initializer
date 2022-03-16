@@ -1,6 +1,6 @@
-### Model `default_value`
+### Model `cash_rounding`
 
-The `default_value` subfolder allows to import default values provided as CSV files. See the example below:
+The `rounding` subfolder allows to import cash rounding rules provided as CSV files. See the example below:
 
 | id | name |  rounding |  strategy | 
 | - | - | - | - |
