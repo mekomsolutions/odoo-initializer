@@ -38,7 +38,7 @@ See below the list of supported models:
 - [Tax (CSV)](./readme/tax.md)
 - [Warehouse (CSV)](./readme/warehouse.md)
 - [Bill of material (CSV)](./readme/bom.md)
-- [Cash Rounding(CSV)](./readme/cash_rounding.md)
+- [Cash Rounding (CSV)](./readme/cash_rounding.md)
 - [Language (XML)](./readme/language.md)
 - [NEW: Additional models can now be added via configuration file!](###-support-additional-models-through-configuration-file)
 
@@ -162,7 +162,7 @@ By default the repo URL will be Mekom Nexus repository, but you can provide your
 ./gradlew clean run
 ```
 
-Note: You can always run both tasks by using 
+Note: You can always run both tasks by using
 ```
 ./gradlew clean test run
 ```
