@@ -131,7 +131,8 @@ class BaseLoader:
 
     def _record_exist(self, record_id):
         cr = registry.cursor
-        cr.execute("SELECT res_id FROM ir_model_data WHERE name='" + record_id + "';")
+        db_mode,db_id = record_id.split('.', 1)
+        cr.execute("SELECT res_id FROM ir_model_data WHERE name='" + db_id + "';")
         return cr.dictfetchall() or False
 
     # Rule to delete a field that shouldn't be updated if found, from the record
