@@ -18,9 +18,9 @@ class TestLoader(tests.TransactionCase):
     @staticmethod
     def _get_non_updated_groups():
         return [
-            {"id": "group_test_1", "name": "test_1", "comment": "other"},
-            {"id": "group_test_2", "name": "test_2", "comment": "filter"},
-            {"id": "group_test_3", "name": "test_3", "comment": "other"},
+            {"id": "init.group_test_1", "name": "test_1", "comment": "other"},
+            {"id": "init.group_test_2", "name": "test_2", "comment": "filter"},
+            {"id": "init.group_test_3", "name": "test_3", "comment": "other"},
         ]
 
     def test_load_file_should_import_records(self):
