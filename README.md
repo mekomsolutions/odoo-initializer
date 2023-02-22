@@ -9,7 +9,7 @@ This add-on aims at providing a configuration layer to let implementers start an
 
 Settings and metadata will be loaded onto the Odoo server based on what is provided in the data files.
 
-Those data files are mostly in CSV and XML formats, depending of the model that is loaded.
+Those data files are mostly in CSV and XML formats, depending on the model that is loaded.
 
 They are processed when the add-on is installed.
 
@@ -126,7 +126,7 @@ Install the archive locally:
 
 ### Deploy on repository
 
-2 was to set the credentials:
+2 ways to set the credentials:
 - export username/password as environment variables:
 ```
 # Prompt for Nexus username and password
