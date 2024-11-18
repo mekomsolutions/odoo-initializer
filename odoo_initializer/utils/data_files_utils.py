@@ -52,7 +52,7 @@ class DataFilesUtils:
                             continue
                         import_files.append(file_path)
 
-        return import_files
+        return sorted(import_files)
 
     def get_file_content(self, file_path, allowed_extensions):
         with open(file_path, "r") as file_data:
