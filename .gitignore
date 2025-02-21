@@ -15,3 +15,7 @@ build/
 
 # Target dir
 target/
+
+# JEnv
+.jenv
+.java-version
