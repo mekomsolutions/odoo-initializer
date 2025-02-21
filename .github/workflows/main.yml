@@ -3,19 +3,22 @@ name: Run Odoo addon tests
 on: [push, pull_request]
 
 jobs:
-  test-app:
-
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout sources
+        uses: actions/checkout@v4
 
-      - name: Setup Docker
-        uses: docker-practice/actions-setup-docker@master
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 8
+          distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-      
-      - name: Execute Gradle build
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 5.2
+
+      - name: Build with Gradle
         run: ./gradlew clean test
