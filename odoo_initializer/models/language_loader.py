@@ -20,6 +20,6 @@ class LanguageLoader(BaseLoader):
         model = env[self.model_name]
         for lang in file_:
             language = env['res.lang'].search([("code", "=", lang.text), ("active", "=", False)])
-            if(language.id):
+            if language.id:
                 model.create({'lang_ids': [language.id]}).lang_install()
         return True
