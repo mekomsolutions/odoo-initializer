@@ -19,5 +19,7 @@ class LanguageLoader(BaseLoader):
         env = registry.env
         model = env[self.model_name]
         for lang in file_:
-            model.create({'lang': lang.text}).lang_install()
+            language = env['res.lang'].search([("code", "=", lang.text), ("active", "=", False)])
+            if(language.id):
+                model.create({'lang_ids': [language.id]}).lang_install()
         return True
