@@ -62,7 +62,7 @@ class BaseLoader:
             }
         )
         result = import_wizard.execute_import(
-            self.fields, [], {"quoting": '"', "separator": ",", "headers": True}
+            self.fields, [], {"quoting": '"', "separator": ",", "has_headers": True}
         )
 
         return True
