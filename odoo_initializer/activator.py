@@ -52,8 +52,9 @@ def start_init(cr):
         UOMLoader,
         StockLocationLoader,
         ProductCategoryLoader,
-        DrugLoader,
-        OrdersLoader,
+        #-- The 2 below are deprecated because they are not used and could be incompatible with Odoo 17
+        #DrugLoader,
+        #OrdersLoader,
         ProductVariantLoader,
         ProductLoader,
         PriceListLoader,
