@@ -15,8 +15,6 @@ class SettingLoader(BaseLoader):
     allowed_file_extensions = ".xml"
 
     def load_file(self, file_: ET.Element):
-        cr = registry.cursor
-
-        xml = xml_import(cr, "odoo_initializer", {}, "init", False, "")
+        xml = xml_import(registry.env, "odoo_initializer", {}, "init", False, "")
         xml.parse(file_)
         return True

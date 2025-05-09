@@ -61,8 +61,8 @@ class BaseLoader:
                 "file_type": "text/csv",
             }
         )
-        result = import_wizard.do(
-            self.fields, [], {"quoting": '"', "separator": ",", "headers": True}
+        result = import_wizard.execute_import(
+            self.fields, [], {"quoting": '"', "separator": ",", "has_headers": True}
         )
 
         return True

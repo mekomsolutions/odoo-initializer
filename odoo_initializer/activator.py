@@ -52,8 +52,6 @@ def start_init(cr):
         UOMLoader,
         StockLocationLoader,
         ProductCategoryLoader,
-        DrugLoader,
-        OrdersLoader,
         ProductVariantLoader,
         ProductLoader,
         PriceListLoader,
