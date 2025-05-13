@@ -15,13 +15,11 @@ from .models.account_loader import AccountLoader
 from .models.journal_loader import JournalLoader
 from .models.fiscal_position_loader import FiscalPositionLoader
 from .models.product_category_loader import ProductCategoryLoader
-from .models.drug_loader import DrugLoader
 from .models.product_loader import ProductLoader
 from .models.product_variant_loader import ProductVariantLoader
 from .models.system_parameter_loader import SystemParameterLoader
 from .models.default_value_loader import DefaultValueLoader
 from .models.currency_loader import CurrencyLoader
-from .models.orders_loader import OrdersLoader
 from .models.language_loader import LanguageLoader
 from .models.decimal_precision_loader import DecimalPrecisionLoader
 from .models.uom_loader import UOMLoader
