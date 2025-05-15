@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id>zip-addon</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <includes>
+                <include>odoo_initializer/**/*.py</include>
+                <include>odoo_initializer/static/**</include>
+            </includes>
+            <excludes>
+                <exclude>odoo_initializer/tests/**</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+</assembly>
