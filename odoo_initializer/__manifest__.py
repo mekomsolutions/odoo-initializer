@@ -16,7 +16,7 @@
     'website': "http://www.mekomsolutions.com",
 
     'category': 'Technical Settings',
-    'version': '${odooVersion}.${project.version}',
+    'version': '${odooVersion}.${addonVersion}',
 
     "depends": ["base", "base_import"],
 
