@@ -11,8 +11,6 @@ on:
 jobs:
   validate:
     uses: mekomsolutions/shared-github-workflow/.github/workflows/maven-build-test.yml@main
-    with:
-      use-secrets: true
     secrets:
       NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
       NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
