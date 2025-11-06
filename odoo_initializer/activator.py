@@ -1,5 +1,13 @@
 import logging
 
+from .models.ir_actions_act_window import IrActionsActWindowLoader
+from .models.ir_model_fields_loader import IrModelFieldsLoader
+from .models.ir_model_fields_selection_loader import IrModelFieldsSelectionLoader
+from .models.ir_ui_view_loader import IrUiViewLoader
+from .models.oauth_loader import OAuthLoader
+from .models.stock_location_route_loader import StockLocationRouteLoader
+from .models.stock_picking_type_loader import StockPickingTypeLoader
+from .models.ir_model_loader import IrModelLoader
 from .utils import config
 from .utils.registry import registry
 from .utils.models_import import ModelsImport
@@ -49,9 +57,6 @@ def start_init(cr):
         PaymentTermLoader,
         UOMLoader,
         StockLocationLoader,
-        ProductCategoryLoader,
-        ProductVariantLoader,
-        ProductLoader,
         PriceListLoader,
         DefaultValueLoader,
         CompanyPropertyLoader,
@@ -62,6 +67,17 @@ def start_init(cr):
         BomLoader,
         CashRoundingLoader,
         LanguageLoader,
+        OAuthLoader,
+        StockPickingTypeLoader,
+        StockLocationRouteLoader,
+        IrActionsActWindowLoader,
+        IrModelFieldsLoader,
+        IrModelFieldsSelectionLoader,
+        IrModelLoader,
+        IrUiViewLoader,
+        ProductCategoryLoader,
+        ProductVariantLoader,
+        ProductLoader
     ]
 
     registry.initialize(cr)
